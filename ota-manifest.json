@@ -1,40 +1,1033 @@
 {
-  "version": "4.2.2",
-  "updatedAt": "2026-11-25 15:15 IST",
+  "version": "4.2.3",
+  "updatedAt": "2026-11-25 15:26 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "🚀 Live OTA Update v4.2.2 Verified",
-    "message": "OTA Sync is working! Tab. Z-Doctor Special 500mg and Dengue Fever (OTA Verified) are now live."
+    "title": "💊 Jan Aushadhi Prices Updated",
+    "message": "Updated 203 medicines with official PMBJP Drug Codes, MRPs & market price comparisons."
   },
   "formulary": {
     "mode": "merge",
     "items": [
       {
-        "name": "Tab. Z-Doctor Special 500mg (OTA Live Test)",
-        "generic": "LiveTestSalt 500mg",
-        "category": "Analgesic & Antipyretic",
-        "cat": "Analgesic & Antipyretic",
-        "form": "Tablet",
-        "route": "Oral",
+        "name": "Tab. Dolo 650mg",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #511: ₹15 / 15's (Market ~₹170)"
+      },
+      {
+        "name": "Tab. Crocin 500mg",
+        "dose": "1-1-1 (SOS)",
+        "janAushadhi": "PMBJP #23: ₹7 / 10's (Market ~₹76.3)"
+      },
+      {
+        "name": "Tab. Combiflam",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #14: ₹8 / 10's (Market ~₹20.4)"
+      },
+      {
+        "name": "Tab. Zerodol-SP",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #512: ₹19 / 10's (Market ~₹77.6)"
+      },
+      {
+        "name": "Tab. Pantop 40 (Pantocid)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #212: ₹12.1 / 10's (Market ~₹44)"
+      },
+      {
+        "name": "Cap. Pan-D (Pantoprazole + Domperidone)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #465: ₹22 / 10's (Market ~₹112)"
+      },
+      {
+        "name": "Tab. Emeset 4mg (Vomikind)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #209: ₹6.6 / 10's"
+      },
+      {
+        "name": "Inj. Drotin 40mg/2ml (Drotaverine)",
+        "dose": "1 Ampoule (40mg) IV/IM Stat",
+        "janAushadhi": "PMBJP #2540: ₹10 / 2ml Ampoule (Market ~₹12)"
+      },
+      {
+        "name": "Tab. Augmentin 625mg",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #2420: ₹360 / 6's (Market ~₹144)"
+      },
+      {
+        "name": "Tab. Azithromycin 500mg (Azithral)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #72: ₹42 / 3's (Market ~₹115)"
+      },
+      {
+        "name": "Tab. Cefixime 200mg (Taxim-O)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #55: ₹53 / 10's (Market ~₹163)"
+      },
+      {
+        "name": "IV Dextrose Normal Saline (DNS - 500ml)",
+        "dose": "1 Bottle (500ml) IV Stat",
+        "janAushadhi": "PMBJP #728: ₹20 / 500 ml (Market ~₹85)"
+      },
+      {
+        "name": "Inj. Hydrocortisone 100mg (Efcorlin / Primacort)",
+        "dose": "100-200mg IV Stat",
+        "janAushadhi": "PMBJP #913: ₹20 / Vial (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Avil 2ml (Pheniramine Maleate)",
+        "dose": "1 Ampoule (2ml) IM/IV Stat",
+        "janAushadhi": "PMBJP #666: ₹4 / 2 ML (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Montair-LC",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #252: ₹20 / 10's (Market ~₹236)"
+      },
+      {
+        "name": "Syp. Ascoril-LS (Levosalbutamol + Ambroxol)",
+        "dose": "10ml TDS",
+        "janAushadhi": "PMBJP #537: ₹23 / 100 ml Bottle (Market ~₹8.8)"
+      },
+      {
+        "name": "Syp. Ascoril-D (Dextromethorphan + CPM)",
+        "dose": "10ml TDS",
+        "janAushadhi": "PMBJP #1758: ₹25 / 100 ml (Market ~₹38)"
+      },
+      {
+        "name": "Syp. Gelusil MPS",
+        "dose": "10ml TDS",
+        "janAushadhi": "PMBJP #471: ₹46 / 200 ML"
+      },
+      {
+        "name": "Cap. Doxycycline 100mg (Dox-1)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #92: ₹15.4 / 10's (Market ~₹75.6)"
+      },
+      {
+        "name": "Tab. Metronidazole 400mg (Flagyl)",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #201: ₹4.4 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Levofloxacin 500mg (Levaquin)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #95: ₹18 / 10's (Market ~₹125)"
+      },
+      {
+        "name": "Tab. Cephalexin 500mg (Phexin)",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #81: ₹33 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Clarithromycin 500mg (Claribid)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #380: ₹72 / 4's (Market ~₹43.5)"
+      },
+      {
+        "name": "Tab. Nitrofurantoin 100mg (Martifur)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #2614: ₹30 / 15's (Market ~₹507)"
+      },
+      {
+        "name": "Tab. Cefuroxime Axetil 500mg (Ceftum)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #78: ₹75 / 10's (Market ~₹259)"
+      },
+      {
+        "name": "Tab. Paracetamol 650mg (Dolo 650)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #511: ₹15 / 15's (Market ~₹170)"
+      },
+      {
+        "name": "Tab. Paracetamol 500mg (Calpol)",
+        "dose": "1-1-1 (SOS)",
+        "janAushadhi": "PMBJP #23: ₹7 / 10's (Market ~₹76.3)"
+      },
+      {
+        "name": "Tab. Aceclo 100mg + Para 325mg + Serratiopeptidase 15mg (Zerodol-SP)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #512: ₹19 / 10's (Market ~₹77.6)"
+      },
+      {
+        "name": "Tab. Ibuprofen 400mg (Brufen 400)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #15: ₹3 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Tramadol 37.5mg + Paracetamol 325mg (Ultracet)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #1747: ₹10 / 10's (Market ~₹101)"
+      },
+      {
+        "name": "Tab. Mefenamic Acid 500mg (Meftal 500)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #1166: ₹10 / 10's (Market ~₹25.4)"
+      },
+      {
+        "name": "Tab. Drotaverine 80mg (Drotin-DS)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #879: ₹8 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Naproxen 500mg (Naprosyn)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #523: ₹48 / 15's (Market ~₹43.5)"
+      },
+      {
+        "name": "Tab. Ondansetron 4mg (Emeset 4)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #209: ₹6.6 / 10's"
+      },
+      {
+        "name": "Tab. Domperidone 10mg (Domstal)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #186: ₹4.4 / 10's (Market ~₹96)"
+      },
+      {
+        "name": "Syp. Sucralfate 1g + Oxetacaine 20mg (Sucrafil-O)",
+        "dose": "10ml TDS",
+        "janAushadhi": "PMBJP #1068: ₹68 / 100 ml (Market ~₹1406)"
+      },
+      {
+        "name": "Syp. Gelusil MPS Liquid",
+        "dose": "10ml TDS",
+        "janAushadhi": "PMBJP #471: ₹46 / 200 ML"
+      },
+      {
+        "name": "Sachet ORS (Electral 21.8g)",
+        "dose": "1 sachet in 1L water",
+        "janAushadhi": "PMBJP #312: ₹10 / 1's (Market ~₹363)"
+      },
+      {
+        "name": "Syp. Cremaffin Plus (15ml)",
+        "dose": "15ml at bedtime",
+        "janAushadhi": "PMBJP #630: ₹37 / 170 ml Bottle (Market ~₹105)"
+      },
+      {
+        "name": "Tab. Levocetirizine 5mg (Levocet 5)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #1683: ₹14 / 15's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Fexofenadine 120mg (Allegra 120)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #246: ₹24 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Fexofenadine 180mg (Allegra 180)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #246: ₹24 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Syp. Ascoril-D Plus (Dry Cough)",
+        "dose": "10ml TDS",
+        "janAushadhi": "PMBJP #1758: ₹25 / 100 ml (Market ~₹38)"
+      },
+      {
+        "name": "Syp. Benadryl Cough Formula",
+        "dose": "10ml at night",
+        "janAushadhi": "PMBJP #1254: ₹18 / 100 ml Bottle (Market ~₹207)"
+      },
+      {
+        "name": "Tab. Metformin 500mg (Glycomet 500)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #144: ₹13.2 / 10's (Market ~₹507)"
+      },
+      {
+        "name": "Tab. Metformin 1000mg SR (Glycomet-SR 1g)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #144: ₹13.2 / 10's (Market ~₹507)"
+      },
+      {
+        "name": "Tab. Glimepiride 1mg (Amaryl 1)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #137: ₹4.4 / 10's (Market ~₹110)"
+      },
+      {
+        "name": "Tab. Glimepiride 2mg (Amaryl 2)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #137: ₹4.4 / 10's (Market ~₹110)"
+      },
+      {
+        "name": "Tab. Teneligliptin 20mg (Zita 20)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1075: ₹20 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Dapagliflozin 10mg (Forxiga 10)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1592: ₹32 / 10's (Market ~₹175)"
+      },
+      {
+        "name": "Tab. Telmisartan 40mg (Telma 40)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #299: ₹11 / 10's (Market ~₹199)"
+      },
+      {
+        "name": "Tab. Atenolol 50mg (Aten 50)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #265: ₹6.6 / 14's (Market ~₹51.2)"
+      },
+      {
+        "name": "Tab. Metoprolol Succinate 25mg ER (Betaloc-25)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #290: ₹6.6 / 10's (Market ~₹87.3)"
+      },
+      {
+        "name": "Tab. Rosuvastatin 10mg (Rosuvas 10)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #418: ₹28.6 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Ecosprin 75mg (Aspirin 75mg)",
+        "dose": "0-1-0",
+        "janAushadhi": "PMBJP #790: ₹3 / 14's (Market ~₹954)"
+      },
+      {
+        "name": "Inhaler Asthalin 100mcg (Salbutamol)",
+        "dose": "2 puffs SOS",
+        "janAushadhi": "PMBJP #567: ₹110 / 200 MDI (Market ~₹177)"
+      },
+      {
+        "name": "Inhaler Budecort 200mcg (Budesonide)",
+        "dose": "1 puff BD",
+        "janAushadhi": "PMBJP #1626: ₹165 / 120 MD (Market ~₹44.7)"
+      },
+      {
+        "name": "Inhaler Foracort 200 (Formoterol + Budesonide)",
+        "dose": "1 puff BD",
+        "janAushadhi": "PMBJP #1626: ₹165 / 120 MD (Market ~₹44.7)"
+      },
+      {
+        "name": "Tab. Doxofylline 400mg (Doxolin 400)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #555: ₹17 / 10's"
+      },
+      {
+        "name": "Tab. Shelcal 500 (Calcium 500mg + Vit D3 250 IU)",
+        "dose": "0-1-0",
+        "janAushadhi": "PMBJP #1537: ₹33 / 10's (Market ~₹73.8)"
+      },
+      {
+        "name": "Sachet Calcirol 60000 IU (Cholecalciferol)",
+        "dose": "1 sachet weekly",
+        "janAushadhi": "PMBJP #1841: ₹25 / 5 ml (Market ~₹104)"
+      },
+      {
+        "name": "Tab. Neurobion Forte",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #231: ₹16 / 10's (Market ~₹355)"
+      },
+      {
+        "name": "Cap. Becosules Z",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #230: ₹9.9 / 10's (Market ~₹58)"
+      },
+      {
+        "name": "Cream Candid-B (Clotrimazole + Beclomethasone)",
+        "dose": "Apply twice daily",
+        "janAushadhi": "PMBJP #1522: ₹25 / 20 g (Market ~₹102)"
+      },
+      {
+        "name": "Ointment Mupirocin 2% (T-Bact 2%)",
+        "dose": "Apply TID",
+        "janAushadhi": "PMBJP #463: ₹50 / 5 gm (Market ~₹45)"
+      },
+      {
+        "name": "IV RL (Ringer Lactate) 500ml",
+        "dose": "1 Bottle IV",
+        "janAushadhi": "PMBJP #720: ₹24 / 500 ml in FFS Bottle (Market ~₹44.7)"
+      },
+      {
+        "name": "IV NS 0.9% (Normal Saline) 500ml",
+        "dose": "1 Bottle IV",
+        "janAushadhi": "PMBJP #732: ₹15 / 100 ml IV Fluid Plastic Container (Market ~₹69.8)"
+      },
+      {
+        "name": "IV Metronidazole 100ml (Metrogyl)",
+        "dose": "100ml IV",
+        "janAushadhi": "PMBJP #172: ₹8.8 / 100 ml (Market ~₹557)"
+      },
+      {
+        "name": "IV Mannitol 20% 100ml",
+        "dose": "100ml IV",
+        "janAushadhi": "PMBJP #170: ₹28 / 100 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Ondansetron 2ml (Emeset)",
+        "dose": "2ml (4mg) IV/IM",
+        "janAushadhi": "PMBJP #208: ₹4.4 / 2 ml (Market ~₹11.5)"
+      },
+      {
+        "name": "Inj. Diclofenac 75mg/1ml (Dynapar AQ)",
+        "dose": "1 Ampoule IM/IV",
+        "janAushadhi": "PMBJP #10: ₹4 / 3 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Dexamethasone 2ml (Decadron)",
+        "dose": "1-2ml IV/IM",
+        "janAushadhi": "PMBJP #334: ₹6 / 2 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Pheniramine 2ml (Avil)",
+        "dose": "2ml (45.5mg) IM/IV",
+        "janAushadhi": "PMBJP #666: ₹4 / 2 ML (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Iron Sucrose 100mg (Orofer)",
+        "dose": "100mg in 100ml NS",
+        "janAushadhi": "PMBJP #2175: ₹33 / 1's (Market ~₹277)"
+      },
+      {
+        "name": "Tab. Calpol 650mg",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #511: ₹15 / 15's (Market ~₹170)"
+      },
+      {
+        "name": "Tab. Pacimol 650mg",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #511: ₹15 / 15's (Market ~₹170)"
+      },
+      {
+        "name": "Tab. Sumo (Nimesulide 100mg + Paracetamol 325mg)",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #1725: ₹25 / 10's (Market ~₹129)"
+      },
+      {
+        "name": "Tab. Nise 100mg",
+        "dose": "1-0-1 (SOS)",
+        "janAushadhi": "PMBJP #20: ₹6.6 / 10's (Market ~₹5.7)"
+      },
+      {
+        "name": "Tab. Myoril 4mg (Thiocolchicoside)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #1417: ₹45 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Ketorol-DT 10mg (Ketorolac)",
+        "dose": "1 tab SOS (Max TDS)",
+        "janAushadhi": "PMBJP #2061: ₹10 / 10's (Market ~₹35)"
+      },
+      {
+        "name": "Tab. Piroxicam 20mg (Dolonex DT)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #708: ₹21 / 10's (Market ~₹35)"
+      },
+      {
+        "name": "Tab. Etoricoxib 90mg (Nucoxia 90)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #13: ₹31 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Etoricoxib 60mg (Nucoxia 60)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1617: ₹27 / 10's (Market ~₹106)"
+      },
+      {
+        "name": "Tab. Indomethacin 25mg (Idicin)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #17: ₹13 / 10's (Market ~₹44)"
+      },
+      {
+        "name": "Tab. Colchicine 0.5mg (Zyloric-C)",
+        "dose": "1 tab BD / TDS",
+        "janAushadhi": "PMBJP #2255: ₹10 / 10's (Market ~₹36)"
+      },
+      {
+        "name": "Tab. Febuxostat 40mg (Febutaz 40)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #888: ₹20 / 10's (Market ~₹104)"
+      },
+      {
+        "name": "Tab. Allopurinol 100mg (Zyloric 100)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #336: ₹11 / 10's (Market ~₹63.03)"
+      },
+      {
+        "name": "Tab. Baclofen 10mg (Lioresal 10)",
+        "dose": "0-0-1 to 1-0-1",
+        "janAushadhi": "PMBJP #518: ₹11 / 10's"
+      },
+      {
+        "name": "Tab. Tizanidine 2mg (Sirdalud)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #1081: ₹10 / 10's (Market ~₹130)"
+      },
+      {
+        "name": "Tab. Chymoral Forte",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #514: ₹50 / 20's (Market ~₹1290)"
+      },
+      {
+        "name": "Tab. Ceftum 250mg (Cefuroxime)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #78: ₹75 / 10's (Market ~₹259)"
+      },
+      {
+        "name": "Tab. Mahacef 200mg (Cefixime)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #55: ₹53 / 10's (Market ~₹163)"
+      },
+      {
+        "name": "Tab. Cefolac 200mg (Cefixime)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #55: ₹53 / 10's (Market ~₹163)"
+      },
+      {
+        "name": "Tab. Moxikind-CV 625",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #2420: ₹360 / 6's (Market ~₹144)"
+      },
+      {
+        "name": "Tab. Clavam 625",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #39: ₹56.1 / 6's (Market ~₹267)"
+      },
+      {
+        "name": "Tab. Roxid 150mg (Roxithromycin)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #105: ₹28 / 10's (Market ~₹71)"
+      },
+      {
+        "name": "Tab. Levomac 500mg (Levofloxacin)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #96: ₹33 / 10's (Market ~₹115)"
+      },
+      {
+        "name": "Tab. Norflox 400mg",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #99: ₹21 / 10's (Market ~₹58.2)"
+      },
+      {
+        "name": "Tab. Rifaximin 400mg (Rifagut 400)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #481: ₹200 / 10's (Market ~₹69.1)"
+      },
+      {
+        "name": "Tab. Rifaximin 550mg (Rifagut 550)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #1952: ₹170 / 10's (Market ~₹2309)"
+      },
+      {
+        "name": "Tab. Fluconazole 150mg (Forcan 150)",
+        "dose": "1 tablet once weekly",
+        "janAushadhi": "PMBJP #1246: ₹5.5 / 1's (Market ~₹71)"
+      },
+      {
+        "name": "Cap. Itraconazole 100mg (Canditral 100)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #384: ₹24.2 / 4's (Market ~₹178)"
+      },
+      {
+        "name": "Cap. Itraconazole 200mg (Canditral 200)",
+        "dose": "1-0-0 or 1-0-1",
+        "janAushadhi": "PMBJP #1456: ₹35.2 / 4's (Market ~₹91.2)"
+      },
+      {
+        "name": "Tab. Ivermectin 12mg (Ivercross 12)",
+        "dose": "1 tablet single dose",
+        "janAushadhi": "PMBJP #407: ₹23.1 / 10's (Market ~₹41.85)"
+      },
+      {
+        "name": "Inj. Pause 500mg/5ml (Tranexamic Acid)",
+        "dose": "500mg - 1000mg IV Stat",
+        "janAushadhi": "PMBJP #302: ₹24 / 5 ml Amp. (Market ~₹899)"
+      },
+      {
+        "name": "IV Dextrose 5% (D5 - 500ml)",
+        "dose": "1 Bottle (500ml) IV Infusion",
+        "janAushadhi": "PMBJP #725: ₹20 / 500 ml (Market ~₹18.2)"
+      },
+      {
+        "name": "IV Dextrose 10% (D10 - 500ml)",
+        "dose": "500ml Slow IV Infusion",
+        "janAushadhi": "PMBJP #726: ₹16.5 / 500 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Syp. Calpol 250mg/5ml (P-250 DS)",
+        "dose": "5ml TDS SOS",
+        "janAushadhi": "PMBJP #712: ₹21 / 60 ml (Market ~₹67.7)"
+      },
+      {
+        "name": "Syp. Ibugesic-Plus (Ibuprofen 100 + Paracetamol 162.5)",
+        "dose": "5ml TDS SOS",
+        "janAushadhi": "PMBJP #1664: ₹23 / 100 ml (Market ~₹256)"
+      },
+      {
+        "name": "Syp. Meftal-P (Mefenamic Acid 100mg/5ml)",
+        "dose": "5ml TDS SOS",
+        "janAushadhi": "PMBJP #515: ₹18 / 60 ml (Market ~₹449)"
+      },
+      {
+        "name": "Syp. Taxim-O 50mg/5ml (Cefixime)",
+        "dose": "5ml BD",
+        "janAushadhi": "PMBJP #1981: ₹40 / 30ml with Water for Reconstitution (Market ~₹45.6)"
+      },
+      {
+        "name": "Syp. Azithral 100mg / 200mg (Azithromycin)",
+        "dose": "5ml OD",
+        "janAushadhi": "PMBJP #47: ₹15 / 15 ml (Market ~₹31)"
+      },
+      {
+        "name": "Syp. Montair-LC Kid (Montelukast 4 + Levo 2.5)",
+        "dose": "2.5-5ml OD",
+        "janAushadhi": "PMBJP #1711: ₹20 / 60 ml (Market ~₹26.9)"
+      },
+      {
+        "name": "Tab. Cilacar 10mg (Cilnidipine)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1565: ₹16.5 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Cilacar 5mg (Cilnidipine)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1566: ₹11 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Ramipril 2.5mg (Cardace 2.5)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #293: ₹7.7 / 10's (Market ~₹42.9)"
+      },
+      {
+        "name": "Tab. Ramipril 5mg (Cardace 5)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #294: ₹10 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Nebicard 5mg (Nebivolol)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #421: ₹25 / 10's (Market ~₹50.9)"
+      },
+      {
+        "name": "Tab. Concor 2.5mg (Bisoprolol)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1531: ₹11 / 10's (Market ~₹42.9)"
+      },
+      {
+        "name": "Tab. Concor 5mg (Bisoprolol)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #2636: ₹25 / 10's (Market ~₹94)"
+      },
+      {
+        "name": "Tab. Dytor 10mg (Torsemide)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1825: ₹32 / 15's (Market ~₹165)"
+      },
+      {
+        "name": "Tab. Sorbitrate 5mg / 10mg (Isosorbide Dinitrate)",
+        "dose": "1 tab sublingually SOS",
+        "janAushadhi": "PMBJP #283: ₹21 / 50's (Market ~₹9)"
+      },
+      {
+        "name": "Tab. Ryzodeg / Glycomet-Trio 1",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1843: ₹30 / 10's (Market ~₹112)"
+      },
+      {
+        "name": "Tab. Jalra-M 50/500 (Vildagliptin + Metformin)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #1462: ₹30 / 15's (Market ~₹73)"
+      },
+      {
+        "name": "Tab. Forxiga 5mg (Dapagliflozin)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #2101: ₹25 / 10's (Market ~₹158)"
+      },
+      {
+        "name": "Cream Luliconazole 1% (Lulifin / Lulican)",
+        "dose": "Apply thin film once daily",
+        "janAushadhi": "PMBJP #1457: ₹24.2 / 10 gms tube (Market ~₹247)"
+      },
+      {
+        "name": "Cream Betnovate-N (Betamethasone + Neomycin)",
+        "dose": "Apply twice daily",
+        "janAushadhi": "PMBJP #461: ₹17.6 / 20 gm (Market ~₹86)"
+      },
+      {
+        "name": "Lotion Permethrin 5% (Scaboma / Permite)",
+        "dose": "Apply neck-to-toe overnight",
+        "janAushadhi": "PMBJP #1003: ₹24 / 30 gm (Market ~₹109)"
+      },
+      {
+        "name": "Oral Gel Zytee / Mucopain (Choline Salicylate + Benzalkonium)",
+        "dose": "Apply small dab with clean finger",
+        "janAushadhi": "PMBJP #2608: ₹15 / 10g (Market ~₹26.4)"
+      },
+      {
+        "name": "Tab. Stugeron 25mg (Cinnarizine)",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #1112: ₹7.7 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Pregabalin 75mg (Pregeb 75)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #3: ₹22 / 10's (Market ~₹276)"
+      },
+      {
+        "name": "Tab. Gabapentin 100mg / 300mg (Gabapin)",
+        "dose": "0-0-1 to 1-0-1",
+        "janAushadhi": "PMBJP #901: ₹27.5 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Escitalopram 10mg (Nexito 10)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #2549: ₹20 / 10's (Market ~₹64.6)"
+      },
+      {
+        "name": "Tab. Amitriptyline 10mg / 25mg (Tryptomer)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #1908: ₹10 / 10's (Market ~₹11.6)"
+      },
+      {
+        "name": "Tab. Propranolol 40mg (Ciplar 40)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #2313: ₹30 / 10's (Market ~₹73)"
+      },
+      {
+        "name": "Tab. Folic Acid 5mg (Folvite)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #224: ₹4.4 / 15's (Market ~₹148)"
+      },
+      {
+        "name": "Tab. Dydrogesterone 10mg (Duphaston)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #496: ₹350 / 10's"
+      },
+      {
+        "name": "Tab. Tranexamic Acid 500mg + Mefenamic Acid 250mg (Trapic-MF)",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #301: ₹74 / 10's (Market ~₹899)"
+      },
+      {
+        "name": "Inj. Magnex 1.5g (Cefoperazone + Sulbactam)",
+        "dose": "1.5g IV BD",
+        "janAushadhi": "PMBJP #57: ₹50 / Vial & Wfi (Market ~₹83.4)"
+      },
+      {
+        "name": "Inj. Monocef-SB 1.5g (Ceftriaxone + Sulbactam)",
+        "dose": "1.5g IV BD",
+        "janAushadhi": "PMBJP #70: ₹48 / Vial & Wfi (Market ~₹171)"
+      },
+      {
+        "name": "Tab. Linezolid 600mg (Linid / Lizomac)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #382: ₹165 / 10's (Market ~₹1017)"
+      },
+      {
+        "name": "Tab. Udiliv 300mg (Ursodeoxycholic Acid)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #466: ₹160.6 / 10's (Market ~₹100)"
+      },
+      {
+        "name": "Cap. Redotil 100mg (Racecadotril)",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #1774: ₹110 / 15's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Levogastrol 25mg (Levosulpiride)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #945: ₹11 / 10's (Market ~₹12.6)"
+      },
+      {
+        "name": "Inhaler Foracort 400 (Formoterol 6mcg + Budesonide 400mcg)",
+        "dose": "1-2 puffs BD",
+        "janAushadhi": "PMBJP #1626: ₹165 / 120 MD (Market ~₹44.7)"
+      },
+      {
+        "name": "Tab. Bilashine 20mg (Bilastine)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1528: ₹35 / 10's (Market ~₹125)"
+      },
+      {
+        "name": "Tab. Acebrophylline 100mg (Ab Phylline)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #541: ₹22 / 10's (Market ~₹92.1)"
+      },
+      {
+        "name": "Tab. Telma-CT 40/12.5 (Telmisartan + Chlorthalidone)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #436: ₹22 / 10's (Market ~₹66.9)"
+      },
+      {
+        "name": "Tab. Olmesartan 20mg / 40mg (Olmin)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #432: ₹36.3 / 10's (Market ~₹126)"
+      },
+      {
+        "name": "Tab. Trajenta 5mg (Linagliptin)",
+        "dose": "1-0-0",
+        "janAushadhi": "PMBJP #1696: ₹38 / 10's (Market ~₹174)"
+      },
+      {
+        "name": "Tab. Voglibose 0.2mg / 0.3mg (Volibo)",
+        "dose": "1-1-1",
+        "janAushadhi": "PMBJP #367: ₹15.4 / 10's (Market ~₹339)"
+      },
+      {
+        "name": "Normal Saline 0.9% 100ml (Mini-Bag IV Flushing)",
+        "dose": "100ml IV Infusion",
+        "janAushadhi": "PMBJP #732: ₹15 / 100 ml IV Fluid Plastic Container (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Urimax 0.4mg (Tamsulosin)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #1072: ₹22 / 10's (Market ~₹102)"
+      },
+      {
+        "name": "Tab. Urimax-D (Tamsulosin 0.4 + Dutasteride 0.5)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #571: ₹26.4 / 15's (Market ~₹127)"
+      },
+      {
+        "name": "Tab. Silodal 8mg (Silodosin)",
+        "dose": "0-0-1",
+        "janAushadhi": "PMBJP #1866: ₹75 / 10's (Market ~₹290)"
+      },
+      {
+        "name": "Syp. K-Cit / Alkasol (Disodium Hydrogen Citrate)",
+        "dose": "15ml diluted in 1 glass water TDS",
+        "janAushadhi": "PMBJP #311: ₹22 / 100 ml (Market ~₹68)"
+      },
+      {
+        "name": "Tab. Levipil 500mg (Levetiracetam)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #508: ₹68.2 / 10's (Market ~₹36.4)"
+      },
+      {
+        "name": "Tab. Encorate Chrono 300 / 500 (Sodium Valproate)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #1806: ₹25 / 10's (Market ~₹111)"
+      },
+      {
+        "name": "Tab. Tegretol 200mg (Carbamazepine)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #1152: ₹15 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Ativan 1mg / 2mg (Lorazepam)",
+        "dose": "0-0-1 (SOS)",
+        "janAushadhi": "PMBJP #948: ₹11 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Restyl 0.25mg / 0.5mg (Alprazolam)",
+        "dose": "0-0-1 (SOS)",
+        "janAushadhi": "PMBJP #313: ₹4.4 / 10's (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Librax (Chlordiazepoxide 5mg + Clidinium 2.5mg)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #477: ₹9 / 10's (Market ~₹8.7)"
+      },
+      {
+        "name": "Tab. Omee-Instant / Gas-O-Fast",
+        "dose": "1 sachet in water SOS",
+        "janAushadhi": "PMBJP #2709: ₹79 / 10 sachet in monocarton (Market ~₹52)"
+      },
+      {
+        "name": "Tab. Tinidazole 500mg (Tiniba 500)",
+        "dose": "1-0-1",
+        "janAushadhi": "PMBJP #108: ₹16 / 10's (Market ~₹178)"
+      },
+      {
+        "name": "Inj. Lox 2% with Adrenaline (1:200,000) 30ml",
+        "dose": "Infiltrate locally in scalp / trunk wounds",
+        "janAushadhi": "PMBJP #357: ₹22 / 30 ml Vial (Market ~₹12.2)"
+      },
+      {
+        "name": "Inj. Calcium Gluconate 10% (10ml Ampoule)",
+        "dose": "10ml Slow IV over 10 min",
+        "janAushadhi": "PMBJP #818: ₹5 / 10 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Volini / Moov Pain Relief Gel 30g / 50g",
+        "dose": "Apply gently over affected area TDS",
+        "janAushadhi": "PMBJP #525: ₹24 / 30 GM (Market ~₹161)"
+      },
+      {
+        "name": "Volini / Moov Pain Relief Spray 55g",
+        "dose": "Spray from 5-10cm distance for 2-3 sec",
+        "janAushadhi": "PMBJP #648: ₹55 / 35 gm (Market ~₹171)"
+      },
+      {
+        "name": "Tab. Teneligliptin 20mg + Metformin 500mg (Zita-M)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #1129: ₹30 / 10's (Market ~₹73)"
+      },
+      {
+        "name": "Tab. Sitagliptin 50mg + Metformin 500mg (Janumet)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #2364: ₹55 / 10's (Market ~₹2600)"
+      },
+      {
+        "name": "Inj. Insulin Glargine 100 IU/ml (Lantus)",
+        "dose": "10-20 Units SC OD",
+        "janAushadhi": "PMBJP #363: ₹340 / Cartridge 3 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Regular Human Insulin 40 IU/ml (Human Actrapid)",
+        "dose": "As per sliding scale SC",
+        "janAushadhi": "PMBJP #143: ₹90 / 10 ml Vial (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Premixed 30/70 Human Insulin 40 IU/ml (Human Mixtard)",
+        "dose": "As prescribed SC BD",
+        "janAushadhi": "PMBJP #143: ₹90 / 10 ml Vial (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Cilnidipine 10mg + Telmisartan 40mg (Cilacar-T)",
         "dose": "1 Tab OD",
-        "timing": "After food",
-        "duration": "3 days",
-        "symptoms": [
-          "ota test",
-          "fever",
-          "verification test"
-        ],
-        "janAushadhi": "PMBJP - ₹1.00 (OTA Special)",
-        "notes": "✅ Pushed directly from GitHub OTA without an APK update!"
+        "janAushadhi": "PMBJP #1284: ₹24.2 / 10's (Market ~₹77.6)"
+      },
+      {
+        "name": "Tab. Ecosprin AV 75/10 (Aspirin 75mg + Atorvastatin 10mg)",
+        "dose": "1 Cap OD",
+        "janAushadhi": "PMBJP #2072: ₹38 / 10's (Market ~₹193)"
+      },
+      {
+        "name": "Tab. Rosuvastatin 10mg + Fenofibrate 160mg (Rozavel-F)",
+        "dose": "1 Tab OD",
+        "janAushadhi": "PMBJP #435: ₹34.1 / 10's (Market ~₹768)"
+      },
+      {
+        "name": "Tab. Nitroglycerin Controlled Release 2.6mg (Nitrocontin 2.6)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #906: ₹50 / 30's (Market ~₹218)"
+      },
+      {
+        "name": "Syp. Dextromethorphan + Chlorpheniramine + Phenylephrine (Ascoril D)",
+        "dose": "5-10ml TID",
+        "janAushadhi": "PMBJP #1758: ₹25 / 100 ml (Market ~₹38)"
+      },
+      {
+        "name": "Respules Levolin 0.63mg (Levosalbutamol Respules)",
+        "dose": "1 Respule via Nebulizer SOS or TDS",
+        "janAushadhi": "PMBJP #1692: ₹5.7 / 2.5 ml (Market ~₹38.2)"
+      },
+      {
+        "name": "Tab. Ursodeoxycholic Acid 300mg (Udiliv 300)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #466: ₹160.6 / 10's (Market ~₹100)"
+      },
+      {
+        "name": "Cream Urea 10% + Lactic Acid + Liquid Paraffin (Moisturex)",
+        "dose": "Apply BD",
+        "janAushadhi": "PMBJP #2558: ₹35 / 50g (Market ~₹119)"
+      },
+      {
+        "name": "Eye Drops Nepafenac 0.1% (Nevanac)",
+        "dose": "1 drop TDS",
+        "janAushadhi": "PMBJP #978: ₹66 / 5 ml (Market ~₹239)"
+      },
+      {
+        "name": "Tab. Tamsulosin 0.4mg + Dutasteride 0.5mg (Urimax-D)",
+        "dose": "1 Cap OD",
+        "janAushadhi": "PMBJP #571: ₹26.4 / 15's (Market ~₹127)"
+      },
+      {
+        "name": "Tab. Tolterodine Tartrate 2mg (Tolter)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #1873: ₹50 / 10's (Market ~₹534)"
+      },
+      {
+        "name": "Inj. Atropine Sulphate 0.6mg/ml",
+        "dose": "0.6mg - 2mg IV/IM SOS",
+        "janAushadhi": "PMBJP #338: ₹2 / 1 ml (Market ~₹203)"
+      },
+      {
+        "name": "Inj. Hydrocortisone Sodium Succinate 100mg (Efcorlin / Primacort)",
+        "dose": "100-200mg IV stat",
+        "janAushadhi": "PMBJP #913: ₹20 / Vial (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Mannitol 20% IV Infusion (100ml / 350ml)",
+        "dose": "100ml IV rapid infusion over 30 mins",
+        "janAushadhi": "PMBJP #170: ₹28 / 100 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Inj. Phytomenadione 10mg/ml (Vitamin K1 / Kenadion)",
+        "dose": "10mg IM/IV slow",
+        "janAushadhi": "PMBJP #1008: ₹11 / 0.5 ml Ampoule (Market ~₹69.8)"
+      },
+      {
+        "name": "Tab. Medroxyprogesterone Acetate 10mg (Deviry 10)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #954: ₹26 / 10's (Market ~₹31)"
+      },
+      {
+        "name": "Tab. Glucosamine Sulphate 750mg + Diacerein 50mg (Cartigen Duo)",
+        "dose": "1 Tab BD",
+        "janAushadhi": "PMBJP #1135: ₹50 / 10's (Market ~₹684)"
+      },
+      {
+        "name": "Inj. Dopamine 200mg/5ml",
+        "dose": "2-20 mcg/kg/min IV infusion",
+        "janAushadhi": "PMBJP #274: ₹15 / 5 ml (Market ~₹137)"
+      },
+      {
+        "name": "Inj. Calcium Gluconate 10% 10ml",
+        "dose": "10ml slow IV over 10 minutes",
+        "janAushadhi": "PMBJP #818: ₹5 / 10 ml (Market ~₹69.8)"
+      },
+      {
+        "name": "Cap. Evening Primrose Oil 1000mg (Primosa 1000)",
+        "dose": "1 Cap BD",
+        "janAushadhi": "PMBJP #1620: ₹85 / 15's (Market ~₹424)"
+      },
+      {
+        "name": "Cap. Carbonyl Iron 100mg + Folic Acid 1.5mg + Zinc (Fefol-Z)",
+        "dose": "1 Cap OD",
+        "janAushadhi": "PMBJP #1668: ₹15 / 10's (Market ~₹215)"
+      },
+      {
+        "name": "Drops Ciprofloxacin 0.3% + Dexamethasone 0.1% (Ciplox-D Eye/Ear)",
+        "dose": "2-3 drops in ear/eye TDS",
+        "janAushadhi": "PMBJP #1569: ₹11 / 10 ml (Market ~₹1100)"
+      },
+      {
+        "name": "Lotion Gamma Benzene Hexachloride 1% + Cetrimide (Scaboma Lotion)",
+        "dose": "Apply neck down overnight, wash off after 8-12 hours",
+        "janAushadhi": "PMBJP #661: ₹55 / 100 ml (Market ~₹525)"
+      },
+      {
+        "name": "Cream Ciclopirox Olamine 1% (Batrafen / Ciclopirox)",
+        "dose": "Apply thin film BD",
+        "janAushadhi": "PMBJP #2404: ₹100 / 50 gm Lami Tube in Mono Carton (Market ~₹371)"
+      },
+      {
+        "name": "Ointment Clobetasol 0.05% + Salicylic Acid 3% (Tenovate-S)",
+        "dose": "Apply thin layer OD or BD",
+        "janAushadhi": "PMBJP #1578: ₹30 / 20g (Market ~₹111)"
+      },
+      {
+        "name": "Tab. Doxinate (Doxylamine Succinate 10mg + Pyridoxine 10mg)",
+        "dose": "1-2 Tabs at bedtime (can add 1 tab in morning if severe)",
+        "janAushadhi": "PMBJP #474: ₹23 / 30's (Market ~₹8.8)"
+      },
+      {
+        "name": "Tab. Folic Acid 5mg (Folvite 5mg)",
+        "dose": "1 Tab OD",
+        "janAushadhi": "PMBJP #224: ₹4.4 / 15's (Market ~₹148)"
+      },
+      {
+        "name": "Tab. Chloroquine Phosphate 250mg (Lariago 250)",
+        "dose": "600mg base stat, then 300mg at 6h, 24h, 48h",
+        "janAushadhi": "PMBJP #305: ₹5 / 10's (Market ~₹67.8)"
+      },
+      {
+        "name": "Tab. Alendronate Sodium 70mg (Osteophos 70)",
+        "dose": "1 Tab ONCE WEEKLY (e.g. every Sunday)",
+        "janAushadhi": "PMBJP #2226: ₹20 / 4's (Market ~₹138)"
+      },
+      {
+        "name": "Tab. N-Acetylcysteine 600mg Effervescent (Mucinac 600)",
+        "dose": "1 Tab dissolved in half glass water BD",
+        "janAushadhi": "PMBJP #2225: ₹135 / 10's (Market ~₹261)"
       }
     ]
   },
-  "diagnoses": [
-    "Dengue Fever with Warning Signs (OTA Verified)"
-  ],
   "aiPrompts": {
-    "ALL": "- [OTA Verified]: Recommend oral hydration & Jan Aushadhi generic options."
-  },
-  "hotfixCss": "#ota-notice-banner { border-width: 2px !important; box-shadow: 0 4px 12px rgba(13,148,136,0.15) !important; }"
+    "ALL": "- Mention PMBJP Jan Aushadhi affordable generic options when appropriate."
+  }
 }
