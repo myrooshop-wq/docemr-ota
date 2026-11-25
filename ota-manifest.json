@@ -1,11 +1,16 @@
 {
-  "version": "4.2.3",
-  "updatedAt": "2026-11-25 15:26 IST",
+  "version": "4.3.1",
+  "updatedAt": "2026-11-25 16:05 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "💊 Jan Aushadhi Prices Updated",
-    "message": "Updated 203 medicines with official PMBJP Drug Codes, MRPs & market price comparisons."
+    "title": "✨ UI & Settings Updated (v4.3.1 OTA)",
+    "message": "Professional Clinic Header, Settings live header sync, dynamic version badge, and 203 PMBJP prices updated Over-The-Air!"
+  },
+  "uiBundle": {
+    "htmlUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/index.html",
+    "cssUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/styles.css",
+    "jsUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/app.js"
   },
   "formulary": {
     "mode": "merge",
