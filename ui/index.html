@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DocEMR | SHIFA CLINIC - Medical Records &amp; Prescriptions</title>
+  <link rel="stylesheet" href="styles.css?v=3990">
+  <!-- Offline Local Chart.js and jsPDF -->
+  <script src="chart.umd.min.js"></script>
+  <script src="jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Header with Clinic Branding -->
+  <header class="clinic-header" style="background: linear-gradient(135deg, #0b5e57 0%, #0f766e 60%, #115e59 100%); padding: 10px 14px 12px 14px; box-shadow: 0 3px 12px rgba(15, 23, 42, 0.14);">
+    <div class="header-container" style="gap: 10px;">
+      <div class="clinic-identity" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0;">
+        <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+          <button type="button" class="btn-header" onclick="openSideDrawer()" title="Open Menu" aria-label="Open Menu" style="width: 38px; height: 38px; padding: 0; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.22); border-radius: 10px; color: #ffffff;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div id="header-clinic-avatar" style="width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.5px; color: #ffffff; flex-shrink: 0;">SC</div>
+          <div class="clinic-info" style="min-width: 0; flex: 1;">
+            <h1 style="margin: 0; font-size: 1.05rem; font-weight: 800; letter-spacing: 0.3px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">
+              <span id="header-clinic-name">SHIFA CLINIC</span>
+            </h1>
+            <p id="clinic-tagline" style="margin: 2px 0 0 0; font-size: 0.74rem; opacity: 0.88; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500;">Dr. M. A. Khan, MBBS, FCPS &bull; Reg #MC-84920</p>
+          </div>
+        </div>
+        <span id="header-app-version" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #ffffff; font-weight: 700; padding: 3px 8px; border-radius: 999px; font-size: 0.68rem; white-space: nowrap; flex-shrink: 0;">v4.3.1</span>
+      </div>
+
+      <div class="header-actions no-print" style="width: 100%; margin: 0;">
+        <div class="search-box" style="width: 100%; margin: 0;">
+          <span class="search-icon" style="left: 12px; color: rgba(255,255,255,0.8);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+          <input type="text" id="global-patient-search" placeholder="Search patient by name, phone or MR#..." autocomplete="off" style="width: 100%; height: 36px; border-radius: 999px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.24); color: #ffffff; padding: 6px 14px 6px 36px; font-size: 0.84rem;">
+          <div id="search-dropdown" class="search-results-dropdown"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Slide-out Sandwich Side Panel (Drawer) -->
+  <div id="app-drawer-backdrop" class="no-print" onclick="closeSideDrawer()" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); z-index: 2000045; backdrop-filter: blur(2px);"></div>
+  <aside id="app-side-drawer" class="no-print" style="position: fixed; top: 0; left: 0; bottom: 0; width: 280px; max-width: 82vw; background: #ffffff; z-index: 2000050; transform: translateX(-100%); transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 4px 0 24px rgba(0,0,0,0.18); display: flex; flex-direction: column;">
+    <div style="background: linear-gradient(135deg, #0f766e, #0d9488); color: #ffffff; padding: 18px 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+      <div style="min-width: 0;">
+        <div id="drawer-clinic-name" style="font-weight: 800; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">SHIFA CLINIC</div>
+        <div id="drawer-doc-name" style="font-size: 0.78rem; opacity: 0.9; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dr. M. A. Khan, MBBS, FCPS</div>
+        <div id="drawer-app-version" style="font-size: 0.7rem; opacity: 0.75; margin-top: 3px;">DocEMR v4.3.1</div>
+      </div>
+      <button type="button" onclick="closeSideDrawer()" style="background: rgba(255,255,255,0.18); border: none; color: #ffffff; width: 30px; height: 30px; border-radius: 6px; font-size: 1.2rem; cursor: pointer; line-height: 1; flex-shrink: 0;">&times;</button>
+    </div>
+    <div style="flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 4px;">
+      <button type="button" class="btn btn-outline" onclick="switchTab('dashboard'); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">📊 Dashboard</button>
+      <button type="button" class="btn btn-outline" onclick="switchTab('patients'); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">👥 Patients List</button>
+      <button type="button" class="btn btn-outline" onclick="switchTab('prescribe'); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600; color: #0f766e;">💊 Prescribe Rx</button>
+      <button type="button" class="btn btn-outline" onclick="startNewBlankConsultation(); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">📝 New Blank Rx</button>
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 4px 0;">
+      <button type="button" class="btn btn-outline" onclick="openAiScribeModal(); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 700; color: #059669;">✨ AI Scribe</button>
+      <button type="button" class="btn btn-outline" onclick="openDrugLibraryModal(); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">📚 Drug &amp; Injection Library</button>
+      <button type="button" class="btn btn-outline" onclick="openPatientModal(); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">➕ New Patient</button>
+      <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 4px 0;">
+      <button type="button" class="btn btn-outline" onclick="openBackupModal(); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">☁️ Cloud Backup &amp; Restore</button>
+      <button type="button" class="btn btn-outline" onclick="checkForOtaUpdates(true); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600; color: #0f766e;">🔄 Sync Data / Check Updates</button>
+      <button type="button" class="btn btn-outline" onclick="switchTab('settings'); closeSideDrawer();" style="justify-content: flex-start; gap: 10px; border: none; text-align: left; padding: 11px 12px; font-weight: 600;">⚙️ Settings</button>
+    </div>
+  </aside>
+
+  <!-- Navigation Bar (Clean 2-Tab Top Bar) -->
+  <nav class="clinic-nav no-print">
+    <div class="nav-container" style="display: grid; grid-template-columns: 1fr 1fr;">
+      <div class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')" style="justify-content: center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-tab" data-tab="patients" onclick="switchTab('patients')" style="justify-content: center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span>Patients List</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="content-area">
+
+    <!-- 1. DASHBOARD TAB -->
+    <section id="pane-dashboard" class="tab-pane active">
+      <!-- OTA Remote Notice / Clinical Bulletin Banner (Hidden unless pushed via OTA) -->
+      <div id="ota-notice-banner" style="display: none; margin-bottom: 12px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #0d9488; background: #f0fdfa; color: #0f172a; font-size: 0.85rem; align-items: center; justify-content: space-between; gap: 10px;">
+        <div id="ota-notice-content" style="flex: 1; line-height: 1.4;"></div>
+        <button type="button" onclick="dismissOtaNotice()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: #64748b; padding: 2px 6px;" title="Dismiss">&times;</button>
+      </div>
+      <!-- Google / Gemini Inspired Dashboard Voice Scribe Widget -->
+      <div id="dashboard-voice-scribe-widget" class="dashboard-hero-card">
+        <div class="dashboard-hero-top">
+          <div class="doctor-avatar-circle" id="dashboard-dr-avatar">SN</div>
+          <div class="dashboard-hero-actions">
+            <button type="button" class="hero-icon-btn" onclick="openPatientModal()" title="Register New Patient">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+            </button>
+            <button type="button" class="hero-icon-btn" onclick="openSettingsModal()" title="Clinic &amp; AI Settings">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="dashboard-greeting-block">
+          <div class="greeting-subtitle" id="dashboard-greeting-time">Good evening</div>
+          <div class="greeting-doctor-name" id="dashboard-greeting-name">Shaikh NajmulHuda</div>
+        </div>
+
+        <!-- Google Scribe Bar: Directly opens AI Scribe Modal (with auto-record when mic tapped) -->
+        <div class="gemini-scribe-card" onclick="openAiScribeModal(false)" style="cursor: pointer;">
+          <div class="gemini-card-header">
+            <div class="assign-patient-pill" onclick="event.stopPropagation(); openAiScribeModal(false);" title="Choose Patient for Consultation">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+              <span id="dashboard-assigned-patient-label">+ Assign patient</span>
+            </div>
+            <div class="gemini-header-right">
+              <span class="badge badge-primary" style="font-size: 0.72rem; padding: 3px 8px;">DocEMR AI Scribe</span>
+            </div>
+          </div>
+
+          <div class="gemini-input-container" onclick="openAiScribeModal(false)">
+            <div style="flex: 1; color: #64748b; font-size: 0.92rem; padding: 6px 4px; user-select: none;">
+              Speak or type clinical consultation notes...
+            </div>
+            <div class="gemini-input-tools">
+              <button type="button" class="gemini-clip-btn" onclick="event.stopPropagation(); loadAiPreset('fever'); openAiScribeModal(false);" title="Load clinical preset">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+              </button>
+              <button type="button" id="dashboard-mic-btn" class="gemini-blue-mic-btn" onclick="event.stopPropagation(); openAiScribeModal(true);" title="Tap to start Continuous Voice Dictation">
+                <svg class="mic-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Preset Chips -->
+          <div class="gemini-bottom-bar" style="margin-top: 10px;">
+            <div class="gemini-chips-row">
+              <button type="button" class="ai-preset-chip" onclick="event.stopPropagation(); loadAiPreset('fever'); openAiScribeModal(false);">⚡ Fever &amp; Cough</button>
+              <button type="button" class="ai-preset-chip" onclick="event.stopPropagation(); loadAiPreset('dyspepsia'); openAiScribeModal(false);">⚡ पेट दर्द &amp; गैस</button>
+              <button type="button" class="ai-preset-chip" onclick="event.stopPropagation(); loadAiPreset('diabetes'); openAiScribeModal(false);">⚡ Diabetes Check</button>
+            </div>
+            <div class="gemini-action-btns">
+              <button type="button" class="btn btn-primary btn-sm" onclick="event.stopPropagation(); openAiScribeModal(false);" style="font-size: 0.8rem; padding: 5px 14px; font-weight: 700; background: linear-gradient(135deg, #0d9488, #0f766e); display: inline-flex; align-items: center; gap: 4px;">
+                <span>✨ Open Scribe</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-controls">
+        <h2>
+          <span>Clinical Overview &amp; Analytics</span>
+        </h2>
+        <div class="time-segmented-control">
+          <button class="time-btn active" onclick="setDashboardPeriod('daily', this)">Daily</button>
+          <button class="time-btn" onclick="setDashboardPeriod('weekly', this)">Weekly</button>
+          <button class="time-btn" onclick="setDashboardPeriod('monthly', this)">Monthly</button>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon patients">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <div class="metric-details">
+            <div class="metric-value" id="kpi-total-patients">0</div>
+            <div class="metric-label">Total Registered Patients</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon visits">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="metric-details">
+            <div class="metric-value" id="kpi-period-visits">0</div>
+            <div class="metric-label" id="kpi-visits-label">Today's Consultations</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon prescriptions">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>
+          </div>
+          <div class="metric-details">
+            <div class="metric-value" id="kpi-prescriptions">0</div>
+            <div class="metric-label">Prescriptions Issued</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon sms">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          </div>
+          <div class="metric-details">
+            <div class="metric-value" id="kpi-sms-sent">0</div>
+            <div class="metric-label">WhatsApp / SMS Sent</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Queue Layout -->
+      <div class="dashboard-layout">
+        <!-- Left: Charts -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3 id="chart-heading">Patient Visits Trend</h3>
+              <span class="badge badge-primary" id="chart-badge">Live Analytics</span>
+            </div>
+            <div style="height: 250px; position: relative;">
+              <canvas id="visitsTrendChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Top Clinical Diagnoses</h3>
+              <span class="badge badge-primary">Trend Analysis</span>
+            </div>
+            <div style="height: 220px; position: relative;">
+              <canvas id="diagnosisChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Today's Queue & Quick Actions -->
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <h3>Today's Patient Queue</h3>
+              <button class="btn btn-outline btn-sm" onclick="renderDashboardQueue()">Refresh</button>
+            </div>
+            <div class="table-responsive" style="max-height: 440px; overflow-y: auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Patient</th>
+                    <th>Diagnosis</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="today-queue-tbody">
+                  <!-- Injected via app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Gateway & WhatsApp Status Card -->
+          <div class="card" style="border-top: 4px solid var(--success);">
+            <div class="card-header">
+              <h3>SMS &amp; WhatsApp Direct Service</h3>
+              <span class="badge badge-success" id="gateway-status-pill">Active &amp; Ready</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+              Direct SIM Card SMS delivery &amp; WhatsApp dispatch. Operates directly on device without requiring external servers.
+            </p>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="testGatewayConnection()">Test SMS Service</button>
+              <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="switchTab('settings')">Configure</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PATIENTS DIRECTORY TAB (Mobile Cards + Desktop Table) -->
+    <section id="pane-patients" class="tab-pane">
+      <div class="card">
+        <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+          
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <h3 style="margin: 0;">Patients Directory</h3>
+            <div class="patient-archive-tabs" style="display: inline-flex; background: #e2e8f0; border-radius: 20px; padding: 2px;">
+              <button type="button" id="tab-patient-active" class="btn-archive-toggle active" onclick="switchPatientArchiveView(false)">
+                Active Records (<span id="count-active-patients">0</span>)
+              </button>
+              <button type="button" id="tab-patient-archived" class="btn-archive-toggle" onclick="switchPatientArchiveView(true)">
+                🗑️ Temp. Delete (<span id="count-archived-patients">0</span>)
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; flex: 1; max-width: 480px; justify-content: flex-end;">
+            <input type="text" id="patient-table-filter" class="form-control" placeholder="Search by name, phone, MR..." oninput="filterPatientsTable()">
+            <button class="btn btn-primary" style="white-space: nowrap;" onclick="openPatientModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Add Patient</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Patient History & Timeline Viewer (Inline / Drawer) -->
+        <div id="patient-timeline-inline-viewer" style="display: none; margin-bottom: 20px; background: #ffffff; border: 2px solid #0d9488; border-radius: 8px; padding: 14px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 8px;">
+            <h4 style="margin: 0; color: #0f766e; font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+              <span>📜 Patient Medical History &amp; Timeline</span>
+            </h4>
+            <button type="button" class="btn btn-outline btn-xs" onclick="closePatientTimelineViewer()" style="font-weight: 700; color: #64748b; padding: 3px 10px;">
+              ✕ Close
+            </button>
+          </div>
+          <div id="patient-timeline-inline-content">
+            <!-- Injected via app.js -->
+          </div>
+        </div>
+
+        <!-- Mobile Touch Friendly Patient Cards (Shown on mobile screens) -->
+        <div id="patients-cards-container" class="mobile-only patient-cards-grid">
+          <!-- Injected via app.js -->
+        </div>
+
+        <!-- Desktop Data Table (Shown on screens >= 768px) -->
+        <div class="desktop-only table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Age / Gender</th>
+                <th>Phone (WhatsApp)</th>
+                <th>Blood Group</th>
+                <th>Known Allergies</th>
+                <th>Last Visit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patients-list-tbody">
+              <!-- Injected via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. CONSULTATION & PRESCRIPTION (RX) TAB -->
+    <section id="pane-prescribe" class="tab-pane">
+      
+      <!-- Doctor's Encounter Form -->
+      <div class="card prescribe-edit-form">
+        <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h3 style="margin: 0;">New Consultation &amp; Prescription (Rx)</h3>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openAiScribeModal()" style="background: linear-gradient(135deg, #0f766e, #14b8a6); border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(15,118,110,0.35);">
+              <span>✨ Open AI Scribe Voice</span>
+            </button>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-outline btn-sm" onclick="resetEncounterForm()">Clear</button>
+            <button class="btn btn-primary" onclick="saveAndPreviewPrescription()">
+              <span>Save &amp; Preview Rx</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. Patient Selector / Quick Demographics -->
+        <div class="patient-select-box">
+          <div class="form-grid">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Select Patient *</label>
+              <select id="rx-patient-select" class="form-control" onchange="onRxPatientSelected()">
+                <option value="">-- Choose registered patient or type search above --</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Consultation Date &amp; Time</label>
+              <input type="hidden" id="editing-encounter-id" value="">
+              <input type="datetime-local" id="rx-date" class="form-control">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label>Patient ID / MR #</label>
+              <input type="text" id="rx-patient-id" class="form-control" readonly placeholder="Auto-filled">
+            </div>
+          </div>
+
+          <!-- Patient Summary Alert banner -->
+          <div id="rx-patient-alert-banner" class="patient-alert-box" style="display: none;"></div>
+
+          <!-- 1-Tap Repeat Previous Rx Banner (Eka Care Style) -->
+          <div id="rx-repeat-banner" class="repeat-rx-card" style="display: none;"></div>
+        </div>
+
+        <!-- 2. Vitals (Collapsible & Persistent) -->
+        <div id="vitals-collapsible-wrapper" class="vitals-collapsible-card open">
+          <div class="vitals-header-toggle" onclick="toggleVitalsSection()">
+            <div class="vitals-title-group">
+              <h4>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                <span>1. Clinical Vitals</span>
+              </h4>
+              <span id="vitals-summary-badge" class="vitals-summary-badge">Tap to collapse</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <svg class="vitals-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+
+          <div class="vitals-body-content">
+            <div class="form-grid">
+              <!-- BP: Typeable + Dual Slider -->
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <label for="vital-bp" style="margin-bottom: 2px;">Blood Pressure (BP)</label>
+                  <small id="bp-indicator" style="font-size: 0.72rem; color: #0d9488; font-weight: 700;">Normal</small>
+                </div>
+                <input type="text" id="vital-bp" class="form-control" placeholder="120/80 mmHg" oninput="onBpManualInput()">
+                <!-- Dual Sliders: Systolic & Diastolic -->
+                <div class="vital-slider-row" style="margin-top: 6px;">
+                  <span style="font-size: 0.72rem; font-weight: 700; width: 44px; color: #475569;">Sys:</span>
+                  <input type="range" id="slider-bp-sys" min="70" max="220" value="120" oninput="onBpSliderChange()">
+                  <span id="badge-bp-sys" class="slider-val-badge">120</span>
+                </div>
+                <div class="vital-slider-row">
+                  <span style="font-size: 0.72rem; font-weight: 700; width: 44px; color: #475569;">Dia:</span>
+                  <input type="range" id="slider-bp-dia" min="40" max="140" value="80" oninput="onBpSliderChange()">
+                  <span id="badge-bp-dia" class="slider-val-badge">80</span>
+                </div>
+              </div>
+
+              <!-- Pulse: Typeable + Stepper Counter -->
+              <div class="form-group">
+                <label for="vital-pulse" style="margin-bottom: 2px;">Pulse (BPM)</label>
+                <div class="stepper-input-container">
+                  <input type="number" id="vital-pulse" class="form-control" placeholder="78" oninput="updateVitalsSummary()">
+                  <div class="stepper-btn-group">
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-pulse', 1)">▲</button>
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-pulse', -1)">▼</button>
+                  </div>
+                </div>
+                <div class="quick-tags" style="margin-top: 4px;">
+                  <span class="tag-chip" style="font-size: 0.7rem; padding: 2px 6px;" onclick="setQuickVital('vital-pulse', 72)">72</span>
+                  <span class="tag-chip" style="font-size: 0.7rem; padding: 2px 6px;" onclick="setQuickVital('vital-pulse', 80)">80</span>
+                  <span class="tag-chip" style="font-size: 0.7rem; padding: 2px 6px;" onclick="setQuickVital('vital-pulse', 92)">92</span>
+                </div>
+              </div>
+
+              <!-- Temperature: Typeable + Slider + Stepper (Default 98.6) -->
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <label for="vital-temp" style="margin-bottom: 2px;">Temperature (&deg;F)</label>
+                  <small id="temp-indicator" style="font-size: 0.72rem; color: #10b981; font-weight: 700;">Normal</small>
+                </div>
+                <div class="stepper-input-container">
+                  <input type="number" step="0.1" id="vital-temp" class="form-control" placeholder="98.6" oninput="onTempManualInput()">
+                  <div class="stepper-btn-group">
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-temp', 0.2)">▲</button>
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-temp', -0.2)">▼</button>
+                  </div>
+                </div>
+                <div class="vital-slider-row" style="margin-top: 6px;">
+                  <span style="font-size: 0.72rem; font-weight: 700; width: 44px; color: #475569;">Slide:</span>
+                  <input type="range" id="slider-temp" min="95.0" max="105.0" step="0.1" value="98.6" oninput="onTempSliderChange()">
+                  <span id="badge-temp" class="slider-val-badge">98.6&deg;</span>
+                </div>
+              </div>
+
+              <!-- Weight (kg) -->
+              <div class="form-group">
+                <label for="vital-weight" style="margin-bottom: 2px;">Weight (kg)</label>
+                <div class="stepper-input-container">
+                  <input type="number" step="0.5" id="vital-weight" class="form-control" placeholder="68" oninput="updateVitalsSummary()">
+                  <div class="stepper-btn-group">
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-weight', 0.5)">▲</button>
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-weight', -0.5)">▼</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SpO2 (%): Typeable + Stepper Counter -->
+              <div class="form-group">
+                <label for="vital-spo2" style="margin-bottom: 2px;">SpO2 (%)</label>
+                <div class="stepper-input-container">
+                  <input type="number" id="vital-spo2" class="form-control" placeholder="98" oninput="updateVitalsSummary()">
+                  <div class="stepper-btn-group">
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-spo2', 1)">▲</button>
+                    <button type="button" class="stepper-btn" onclick="stepVital('vital-spo2', -1)">▼</button>
+                  </div>
+                </div>
+                <div class="quick-tags" style="margin-top: 4px;">
+                  <span class="tag-chip" style="font-size: 0.7rem; padding: 2px 6px;" onclick="setQuickVital('vital-spo2', 98)">98%</span>
+                  <span class="tag-chip" style="font-size: 0.7rem; padding: 2px 6px;" onclick="setQuickVital('vital-spo2', 99)">99%</span>
+                  <span class="tag-chip" style="font-size: 0.7rem; padding: 2px 6px;" onclick="setQuickVital('vital-spo2', 95)">95%</span>
+                </div>
+              </div>
+
+              <!-- Blood Sugar: Typeable + Stepper Counter + Fasting/PP/Random Chips -->
+              <div class="form-group">
+                <label for="vital-sugar" style="margin-bottom: 2px;">Blood Sugar (mg/dL)</label>
+                <div class="stepper-input-container">
+                  <input type="text" id="vital-sugar" class="form-control" placeholder="110 (Fasting)" oninput="updateVitalsSummary()">
+                  <div class="stepper-btn-group">
+                    <button type="button" class="stepper-btn" onclick="stepSugar(5)">▲</button>
+                    <button type="button" class="stepper-btn" onclick="stepSugar(-5)">▼</button>
+                  </div>
+                </div>
+                <div class="quick-tags" style="margin-top: 5px;">
+                  <span class="tag-chip" onclick="setSugarType('Fasting')">Fasting</span>
+                  <span class="tag-chip" onclick="setSugarType('PP / Post-Prandial')">Post-Meal (PP)</span>
+                  <span class="tag-chip" onclick="setSugarType('Random')">Random (RBS)</span>
+                  <span class="tag-chip" onclick="setSugarType('HbA1c')">HbA1c</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Symptoms & Diagnosis -->
+        <h4 class="form-section-heading">2. Clinical Presentation &amp; Assessment</h4>
+        <div class="form-grid" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label>Chief Complaints &amp; Symptoms *</label>
+            <div class="autocomplete-container">
+              <textarea id="rx-symptoms" class="form-control" placeholder="e.g. High fever for 3 days, sore throat, productive cough..." oninput="onSymptomsInputChanged()"></textarea>
+              <div id="symptoms-autocomplete-results" class="autocomplete-results"></div>
+            </div>
+            <div id="quick-symptoms-chips" class="quick-tags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+              <!-- Dynamic toggleable symptom chips rendered and reordered via JS -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Clinical Diagnosis / Assessment <span style="font-size: 0.75rem; font-weight: normal; color: #64748b;">(Optional for OPD)</span></label>
+            <div class="autocomplete-container">
+              <input type="text" id="rx-diagnosis" class="form-control" placeholder="e.g. Acute Pharyngitis / Viral Fever" oninput="onDiagnosisInputChanged()">
+              <div id="diagnosis-autocomplete-results" class="autocomplete-results"></div>
+            </div>
+            <div style="font-size: 0.78rem; color: #0f766e; font-weight: 700; margin-top: 6px; margin-bottom: 4px;">💡 Top Diagnoses for Selected Symptoms (Tap to Select):</div>
+            <div id="dynamic-diagnosis-chips" class="quick-tags" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px;">
+              <!-- Dynamically ranked based on Symptoms -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Prescription Builder (Rx) with Google-Style Autocomplete -->
+        <!-- Doctor's Protocol Kits Banner (Age & Condition Smart) -->
+        <div id="dynamic-kits-container" style="display: none; margin-bottom: 14px;"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <h4 class="form-section-heading" style="margin-bottom: 0;">3. Rx - Prescribed Medications</h4>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="openDrugLibraryModal()" style="font-size: 0.78rem; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px; border-color: #0d9488; color: #0d9488; font-weight: 700; background: #f0fdfa;">
+              <span>📚 Drug &amp; Injection Library</span>
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="addMedicineRow()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Add Medicine Row</span>
+            </button>
+          </div>
+        </div>
+
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+          Start typing in the Medicine name box to see instant Google-style drug suggestions with prefilled dosages.
+        </p>
+
+                <!-- Top Quick-Add Suggested Medications (Live Ranked by Symptoms & Diagnosis) -->
+        <div style="background: #f0fdfa; border: 1.5px solid #ccfbf1; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+            <span style="font-size: 0.8rem; color: #0f766e; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+              ⚡ 1-Tap Quick Prescribe (Sorted by Symptoms &amp; Diagnosis):
+            </span>
+            <button type="button" class="btn btn-outline btn-xs" onclick="openDoctorKitsModal()">
+              <span>🩺 Manage Clinical Kits</span>
+            </button>
+          </div>
+          <!-- AI Suggested Prescription Chips (Sorted with AI Badge) -->
+          <div id="rx-ai-suggestions-box" style="display: none; background: #f5f3ff; border: 1.5px solid #ddd6fe; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-size: 0.78rem; color: #6d28d9; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                ✨ AI Suggested Prescriptions (Tap to add/remove):
+              </span>
+              <span style="font-size: 0.7rem; color: #7c3aed; background: #ede9fe; padding: 2px 6px; border-radius: 4px; font-weight: 600;">AI Active</span>
+            </div>
+            <div id="rx-ai-med-chips" class="quick-tags" style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <!-- AI suggested prescription chips injected here with tiny AI badge -->
+            </div>
+          </div>
+
+          <div id="dynamic-med-chips" class="quick-tags" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px;">
+            <!-- Populated dynamically based on symptoms, diagnosis, and patient age -->
+          </div>
+          <div style="font-size: 0.72rem; color: #0d9488; margin-top: 4px;">
+            💡 Tap any medicine above to instantly insert it into the prescription row below.
+          </div>
+        </div>
+
+        <div class="rx-table-container">
+          <div class="rx-table-header desktop-only">
+            <div>Medicine Name &amp; Strength</div>
+            <div>Dosage &amp; Frequency</div>
+            <div>When / Timing</div>
+            <div>Duration</div>
+            <div>Special Instructions</div>
+            <div></div>
+          </div>
+          <div id="rx-medicine-rows">
+            <!-- Dynamic Medicine Rows with Autocomplete injected here -->
+          </div>
+        </div>
+
+        
+
+        <!-- 5. Investigations & Advice & Followup -->
+        <h4 class="form-section-heading">4. Investigations, Advice &amp; Follow-Up</h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Lab Tests / Investigations Recommended</label>
+            <input type="text" id="rx-investigations" class="form-control" placeholder="e.g. CBC, ESR, Blood Sugar Fasting, Lipid Profile...">
+          </div>
+          <div class="form-group">
+            <label>General Advice / Dietary Restrictions</label>
+            <input type="text" id="rx-advice" class="form-control" placeholder="e.g. Plenty of oral fluids, warm saline gargles, light diet, rest...">
+          </div>
+          <div class="form-group">
+            <label>Follow-up Review Date</label>
+            <input type="date" id="rx-followup" class="form-control">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;">
+          <button class="btn btn-primary" style="padding: 12px 28px;" onclick="saveAndPreviewPrescription()">
+            <span>Save &amp; Preview Prescription</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Prescription Output / Print Preview Container -->
+      <div id="rx-preview-container" class="card" style="display: none;">
+        <div class="card-header no-print" style="flex-wrap: wrap; gap: 8px;">
+          <h3>Prescription Preview - Shifa Clinic</h3>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="btn btn-outline btn-sm" onclick="editCurrentPrescription()">
+              <span>Edit Rx</span>
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="shareCurrentPrescriptionPDF()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              <span>Share PDF</span>
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="downloadCurrentPrescriptionPDF()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>Download PDF</span>
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="window.print()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span>Print</span>
+            </button>
+            <button class="btn btn-whatsapp btn-sm" onclick="sendPrescriptionViaWhatsApp()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              <span>WhatsApp</span>
+            </button>
+            <button class="btn btn-sms btn-sm" onclick="sendPrescriptionViaSMS()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <span>SMS</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Rendered Physical Prescription Slip -->
+        <div class="rx-print-sheet" id="printable-prescription-sheet">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- Mobile Quick Action floating bar at bottom of prescription -->
+        <div class="no-print" style="max-width: 800px; margin: 20px auto 0 auto; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="shareCurrentPrescriptionPDF()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span>Share PDF</span>
+          </button>
+          <button class="btn btn-outline" onclick="downloadCurrentPrescriptionPDF()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download PDF</span>
+          </button>
+          <button class="btn btn-whatsapp" onclick="openDispatchModal('whatsapp')">
+            <span>Send on WhatsApp</span>
+          </button>
+          <button class="btn btn-sms" onclick="openDispatchModal('sms')">
+            <span>Send via SMS</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PATIENT TIMELINE & HISTORY TAB -->
+    <section id="pane-history" class="tab-pane">
+      <div class="card">
+        <div class="card-header" style="flex-wrap: wrap; gap: 10px;">
+          <h3>Patient Medical History &amp; Timeline</h3>
+          <div style="min-width: 260px; flex: 1; max-width: 400px;">
+            <select id="history-patient-select" class="form-control" onchange="renderPatientHistory()">
+              <option value="">-- Select Patient to view full timeline --</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="history-content-area">
+          <p style="text-align: center; color: var(--text-muted); padding: 40px 0;">
+            Please select a patient above or search from the top bar to inspect past encounters, vitals, and repeat previous prescriptions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SETTINGS & GATEWAY CONFIG TAB -->
+    <section id="pane-settings" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <h3>Clinic Profile &amp; Prescription Settings</h3>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Configuration</button>
+        </div>
+
+        <!-- NEW: Diagnosis Privacy & Communication Setting -->
+        <div style="margin-bottom: 18px; background: #f0fdfa; border: 1.5px solid #0d9488; padding: 14px 16px; border-radius: 8px;">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <input type="checkbox" id="setting-include-diagnosis" style="width: 22px; height: 22px; margin-top: 2px; cursor: pointer;" checked>
+            <div>
+              <label for="setting-include-diagnosis" style="font-weight: 700; font-size: 0.96rem; color: #0f766e; cursor: pointer; display: block;">
+                Include Clinical Diagnosis in Patient Communications (WhatsApp, SMS &amp; PDF)
+              </label>
+              <div style="font-size: 0.82rem; color: #334155; margin-top: 4px; line-height: 1.4;">
+                &bull; <strong>Checked (Default):</strong> The clinical diagnosis and complaints are included in WhatsApp/SMS messages and printed/shared PDF slips.<br>
+                &bull; <strong>Unchecked:</strong> Prescriptions sent or shared will only contain medications, dosage, duration and advice &mdash; keeping the diagnosis confidential.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Clinic Name</label>
+            <input type="text" id="setting-clinic-name" class="form-control" value="SHIFA CLINIC">
+          </div>
+          <div class="form-group">
+            <label>Doctor Name &amp; Qualifications</label>
+            <input type="text" id="setting-doc-name" class="form-control" value="Dr. M. A. Khan, MBBS, FCPS">
+          </div>
+          <div class="form-group">
+            <label>Registration Number</label>
+            <input type="text" id="setting-clinic-reg" class="form-control" value="MC-84920">
+          </div>
+          <div class="form-group">
+            <label>Clinic Phone (Contact / WhatsApp)</label>
+            <input type="text" id="setting-clinic-phone" class="form-control" value="+91 98200 12345">
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Clinic Address</label>
+            <input type="text" id="setting-clinic-address" class="form-control" value="Shop #4, Al-Madina Heights, Main Road, Shifa Market">
+          </div>
+        </div>
+
+        <h4 style="margin: 20px 0 10px 0; font-size: 0.95rem; font-weight: 700; color: var(--primary-dark);">
+          Android SMS Service Configuration
+        </h4>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>SMS Sending Method</label>
+            <select id="setting-sms-mode" class="form-control">
+              <option value="direct">Direct SIM Card Dispatch (Background SMSGate)</option>
+              <option value="intent">Open Phone Default SMS App (Preview First)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>SIM Slot Number</label>
+            <select id="setting-sms-sim" class="form-control">
+              <option value="1">SIM 1 (Default)</option>
+              <option value="2">SIM 2</option>
+            </select>
+          </div>
+        </div>
+
+        
+        <!-- DOCTOR'S PERSONAL CLINICAL KITS IN SETTINGS -->
+        <div class="doctor-rules-container" style="background: #ffffff; border: 1.5px solid #0d9488; margin-top: 24px; border-radius: 8px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <div>
+              <h4 style="margin: 0; color: #0f766e; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
+                <span>🩺 Doctor's Clinical Kits &amp; Treatment Protocols</span>
+              </h4>
+              <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: #64748b;">
+                Create and manage personalized 1-tap treatment bundles for instant prescription autofill.
+              </p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openCreateKitModal()">
+              <span>+ Create New Kit</span>
+            </button>
+          </div>
+
+          <div id="settings-kits-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- DOCTOR'S CUSTOM MEDICINE RANKING & PREFERENCE RULES -->
+        <div class="doctor-rules-container" style="background: #ffffff; border: 1.5px solid #3b82f6; margin-top: 18px; border-radius: 8px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <div>
+              <h4 style="margin: 0; color: #1d4ed8; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
+                <span>⚡ Doctor's Personalized Medicine Ranking Rules</span>
+              </h4>
+              <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: #64748b;">
+                Rank your favorite medications per symptom (e.g. For Fever: 1. Dolo 650, 2. Paracetamol). DocEMR automatically sorts your preferred medicines to the very top!
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" style="border-color: #3b82f6; color: #1d4ed8; font-weight: 700;" onclick="openAddDoctorRuleModal()">
+              <span>+ Add Ranking Rule</span>
+            </button>
+          </div>
+
+          <div id="settings-rules-list" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- CLOUD SYNC & OTA LIVE UPDATES -->
+        <div class="doctor-rules-container" style="background: #f8fafc; border: 1.5px solid #0d9488; margin-top: 18px; border-radius: 8px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h4 style="margin: 0; color: #0f766e; font-size: 1.05rem; display: flex; align-items: center; gap: 6px;">
+                <span>☁️ Over-The-Air (OTA) Live Updates &amp; Sync</span>
+              </h4>
+              <p style="margin: 3px 0 0 0; font-size: 0.82rem; color: #64748b;">
+                Update medicines, Jan Aushadhi prices, AI Scribe prompts, clinical kits &amp; UI hotfixes over the internet without reinstalling the APK.
+              </p>
+            </div>
+            <button type="button" id="ota-check-btn" class="btn btn-primary btn-sm" onclick="checkForOtaUpdates(true)" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+              <span>🔄 Sync Data / Check Updates</span>
+            </button>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 12px; font-size: 0.8rem; margin-bottom: 10px;">
+            <div><strong style="color: #475569;">Data Version:</strong> <span id="ota-sync-version" style="color: #0f766e; font-weight: 700;">v4.2.0-baseline</span></div>
+            <div><strong style="color: #475569;">Last Synced:</strong> <span id="ota-sync-last-checked" style="color: #334155;">Never</span></div>
+            <div style="grid-column: 1 / -1;"><strong style="color: #475569;">Loaded Modules:</strong> <span id="ota-sync-summary" style="color: #334155;">500 Drugs &bull; Built-in Protocols &amp; AI Prompts</span></div>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <input type="url" id="ota-manifest-url" class="form-control" placeholder="https://raw.githubusercontent.com/.../ota-manifest.json" style="flex: 1; min-width: 220px; font-size: 0.82rem;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="saveOtaManifestUrl()">Save URL</button>
+            <button type="button" class="btn btn-outline btn-sm" style="color: #b91c1c; border-color: #fca5a5;" onclick="resetOtaToDefaults()">Reset OTA Defaults</button>
+          </div>
+        </div>
+
+<div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-outline" onclick="testGatewayConnection()">Test SMS Dispatch</button>
+          <button class="btn btn-outline" onclick="exportDataBackup()">Export JSON Database Backup</button>
+          <button class="btn btn-outline" onclick="resetDatabaseToDefault()">Reset Demo Clinic Data</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Add / Edit Patient -->
+  <div id="patient-modal" class="modal-overlay" style="z-index: 2000000;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="patient-modal-title">Register New Patient</h3>
+        <button class="modal-close" onclick="closePatientModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="modal-patient-id">
+        <div class="form-grid">
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Full Patient Name *</label>
+            <input type="text" id="modal-patient-name" class="form-control" placeholder="e.g. Mohammed Ahmed">
+          </div>
+          <div class="form-group">
+            <label>Age (Years) *</label>
+            <input type="number" id="modal-patient-age" class="form-control" placeholder="e.g. 35">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="modal-patient-gender" class="form-control">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Phone / WhatsApp Number <small style="color: #64748b; font-weight: normal;">(Optional)</small></label>
+            <input type="tel" id="modal-patient-phone" class="form-control" placeholder="e.g. +91 98200 12345">
+          </div>
+          <div class="form-group">
+            <label>Blood Group <small style="color: #64748b; font-weight: normal;">(Optional)</small></label>
+            <select id="modal-patient-blood" class="form-control">
+              <option value="Unknown">Unknown</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Known Drug Allergies <small style="color: #64748b; font-weight: normal;">(Optional)</small></label>
+            <input type="text" id="modal-patient-allergies" class="form-control" placeholder="e.g. Penicillin, Sulfa drugs, NSAIDs (or None)">
+          </div>
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Past Medical History / Chronic Illnesses <small style="color: #64748b; font-weight: normal;">(Optional)</small></label>
+            <textarea id="modal-patient-history" class="form-control" placeholder="e.g. Hypertension x 5 yrs, Type 2 Diabetes, Asthma..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closePatientModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="savePatient()">Save Patient Record</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Dispatch Prescription (WhatsApp & SMS) -->
+  <div id="dispatch-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="dispatch-modal-title">Dispatch Prescription</h3>
+        <button class="modal-close" onclick="closeDispatchModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px; border: 1px solid var(--border);">
+          <div style="display: flex; justify-content: space-between; font-size: 0.88rem; flex-wrap: wrap; gap: 6px;">
+            <span><strong>Patient:</strong> <span id="dispatch-pt-name">--</span></span>
+            <span><strong>Phone:</strong> <input type="tel" id="dispatch-custom-phone" class="form-control" style="display: inline-block; width: 170px; padding: 4px 8px; font-size: 0.85rem; margin-left: 4px;" placeholder="e.g. +91 98200 12345"></span>
+          </div>
+        </div>
+
+        <!-- Quick on-the-fly Diagnosis Toggle -->
+        <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px; background: #f0fdfa; padding: 8px 12px; border-radius: 6px; border: 1px solid #ccfbf1;">
+          <input type="checkbox" id="dispatch-include-diag-toggle" style="width: 18px; height: 18px; cursor: pointer;" onchange="onDispatchDiagToggleChanged()">
+          <label for="dispatch-include-diag-toggle" style="font-size: 0.86rem; font-weight: 700; color: #0f766e; cursor: pointer;">
+            Include Clinical Diagnosis in this message
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Prescription Message Preview (Editable):</label>
+          <textarea id="dispatch-msg-text" class="form-control" style="min-height: 180px; font-family: monospace; font-size: 0.82rem; white-space: pre-wrap;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;">
+          <button class="btn btn-whatsapp" style="padding: 12px;" onclick="executeWhatsAppDispatch()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <span>WhatsApp</span>
+          </button>
+          <button class="btn btn-sms" style="padding: 12px;" onclick="executeSMSDirectDispatch()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Send Direct SMS (SIM)</span>
+          </button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 8px;">
+          <button class="btn btn-outline btn-sm" onclick="executeSMSIntentDispatch()">
+            <span>Open Default SMS App</span>
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="copyDispatchText()">
+            <span>Copy Text</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDispatchModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- MODAL: Doctor's Clinical Kits Manager -->
+  <div id="kits-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 760px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin: 0;">🩺 Doctor's Clinical Protocols &amp; Kits</h3>
+          <p style="margin: 2px 0 0 0; font-size: 0.8rem; color: var(--text-muted);">
+            Pre-configured treatment bundles with age-specific dosages. 1-tap prescription filling.
+          </p>
+        </div>
+        <button class="modal-close" onclick="closeDoctorKitsModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; flex: 1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <!-- Filter chips -->
+          <div class="quick-tags" style="margin: 0;">
+            <span class="tag-chip active" id="kit-filter-all" onclick="filterKits('all')">All Protocols</span>
+            <span class="tag-chip" id="kit-filter-custom" onclick="filterKits('custom')">⭐ My Clinic Kits</span>
+            <span class="tag-chip" id="kit-filter-adult" onclick="filterKits('adult')">Adult (12y+)</span>
+            <span class="tag-chip" id="kit-filter-pediatric" onclick="filterKits('pediatric')">Pediatric (1-12y)</span>
+            <span class="tag-chip" id="kit-filter-infant" onclick="filterKits('infant')">Infants (&lt;1y)</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openCreateKitModal()">
+            <span>➕ Create New Kit</span>
+          </button>
+        </div>
+
+        <div id="kits-list-container" class="kits-grid">
+          <!-- Dynamic Kit Cards rendered here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeDoctorKitsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Create / Edit Clinical Kit -->
+  <div id="kit-edit-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 680px; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 id="kit-edit-modal-title">Create Clinical Kit</h3>
+        <button class="modal-close" onclick="closeKitEditModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; flex: 1;">
+        <input type="hidden" id="kit-edit-id">
+        <div class="form-grid">
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Kit / Protocol Name <span style="color:#ef4444; font-weight:700;">*</span></label>
+            <input type="text" id="kit-edit-name" class="form-control" placeholder="e.g. Acute Pharyngitis Kit (Adult)">
+          </div>
+
+          <div class="form-group">
+            <label>Linked Clinical Diagnosis <span style="color:#ef4444; font-weight:700;">*</span></label>
+            <input type="text" id="kit-edit-diag" class="form-control" placeholder="e.g. Acute Pharyngo-Tonsillitis">
+            <div class="quick-tags" style="margin-top: 4px;">
+              <span class="tag-chip" onclick="document.getElementById('kit-edit-diag').value = 'Upper Respiratory Tract Infection (URTI)'">URTI</span>
+              <span class="tag-chip" onclick="document.getElementById('kit-edit-diag').value = 'Acute Pharyngo-Tonsillitis'">Pharyngitis</span>
+              <span class="tag-chip" onclick="document.getElementById('kit-edit-diag').value = 'Acute Gastritis / Acid Peptic Disease (GERD)'">Gastritis</span>
+              <span class="tag-chip" onclick="document.getElementById('kit-edit-diag').value = 'Acute Gastroenteritis'">Gastroenteritis</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Target Age Group</label>
+            <select id="kit-edit-age" class="form-control">
+              <option value="all">All Ages (General)</option>
+              <option value="adult" selected>Adult (12+ Years)</option>
+              <option value="pediatric">Pediatric (1 - 12 Years)</option>
+              <option value="infant">Infant (0 - 12 Months)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>Trigger Symptoms <small style="color: #64748b;">(Comma separated or tap chips)</small></label>
+            <div class="autocomplete-container">
+              <input type="text" id="kit-edit-symptoms" class="form-control" placeholder="e.g. Sore Throat, Fever, Painful Swallowing" oninput="onKitSymptomsInputChanged()">
+              <div id="kit-symptoms-autocomplete-results" class="autocomplete-results"></div>
+            </div>
+            <div id="kit-edit-symptoms-chips" class="quick-tags" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
+              <!-- Populated dynamically with toggleable symptom chips for kit creation -->
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; margin-bottom: 8px;">
+          <label style="font-weight: 700; font-size: 0.88rem; margin: 0;">Prescribed Medications in this Kit *</label>
+          <button type="button" class="btn btn-outline btn-xs" onclick="addKitMedicineRow()">+ Add Medicine to Kit</button>
+        </div>
+
+        <div id="kit-medicine-rows" class="kit-med-container">
+          <!-- Dynamic Kit Medicine Rows -->
+        </div>
+
+        <div class="form-grid" style="margin-top: 14px;">
+          <div class="form-group">
+            <label>Default Clinical Advice</label>
+            <input type="text" id="kit-edit-advice" class="form-control" placeholder="e.g. Warm saline gargles, plenty of fluids...">
+          </div>
+          <div class="form-group">
+            <label>Default Investigations</label>
+            <input type="text" id="kit-edit-investigations" class="form-control" placeholder="e.g. CBC, Throat Swab...">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeKitEditModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveDoctorKit()">Save Clinical Kit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  
+  
+
+  <!-- HIDDEN FILE PICKER FOR BACKUP RESTORE -->
+  <input type="file" id="backup-file-picker" style="display: none;" accept=".docemr,.json" onchange="handleBackupFileSelect(event)">
+
+  <!-- MODAL: Quick Cloud Backup & Sync -->
+  <div id="backup-sync-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 8px; color: #0f766e; font-size: 1.1rem; margin: 0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+          <span>Clinic Backup &amp; Multi-Device Sync</span>
+        </h3>
+        <button class="modal-close" onclick="closeBackupModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div>
+            <div style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">DocEMR Cloud Vault</div>
+            <div id="modal-sync-time-label" style="font-size: 0.8rem; color: #64748b;">Last backup: Checking...</div>
+          </div>
+          <span id="modal-backup-badge" class="backup-status-badge synced">
+            <span class="sync-dot-green"></span>
+            <span id="modal-backup-status-text">All Saved</span>
+          </span>
+        </div>
+
+        <div class="backup-stats-grid">
+          <div class="backup-stat-box">
+            <div id="modal-stat-patients" class="backup-stat-val">0</div>
+            <div class="backup-stat-label">Patients</div>
+          </div>
+          <div class="backup-stat-box">
+            <div id="modal-stat-encounters" class="backup-stat-val">0</div>
+            <div class="backup-stat-label">Consultations</div>
+          </div>
+          <div class="backup-stat-box">
+            <div id="modal-stat-kits" class="backup-stat-val">0</div>
+            <div class="backup-stat-label">Clinical Kits</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px;">
+          <button type="button" class="btn btn-primary" onclick="executeClinicBackup('download')" style="padding: 10px 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>1-Tap Download Encrypted Backup (.docemr)</span>
+          </button>
+          
+          <button type="button" class="btn btn-outline" onclick="executeClinicBackup('share')" style="padding: 10px 14px; border-color: #0d9488; color: #0d9488; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+            <span>Share to Google Drive / WhatsApp / Email</span>
+          </button>
+
+          <button type="button" class="btn btn-outline" onclick="triggerRestorePicker()" style="padding: 9px 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <span>Restore / Import Records from File</span>
+          </button>
+        </div>
+
+        <div style="margin-top: 14px; font-size: 0.76rem; color: #64748b; line-height: 1.4; text-align: center;">
+          🔒 Backups are self-contained and encrypted. Your patient data never leaves your device or chosen cloud account.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Restore Safety Audit & Confirmation -->
+  <div id="restore-audit-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header" style="background: #f0fdfa;">
+        <h3 style="display: flex; align-items: center; gap: 8px; color: #0f766e; font-size: 1.05rem; margin: 0;">
+          <span>📋 Backup File Verified</span>
+        </h3>
+        <button class="modal-close" onclick="closeRestoreAuditModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px 20px;">
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-size: 0.82rem; color: #64748b;">Source Clinic:</div>
+          <div id="audit-clinic-name" style="font-weight: 700; color: #0f172a; font-size: 0.95rem;">-</div>
+          <div style="font-size: 0.78rem; color: #64748b; margin-top: 4px;">Backup Timestamp: <strong id="audit-backup-date" style="color: #0f766e;">-</strong></div>
+        </div>
+
+        <div class="backup-stats-grid" style="margin-bottom: 16px;">
+          <div class="backup-stat-box">
+            <div id="audit-patients-count" class="backup-stat-val">0</div>
+            <div class="backup-stat-label">Patients Found</div>
+          </div>
+          <div class="backup-stat-box">
+            <div id="audit-encounters-count" class="backup-stat-val">0</div>
+            <div class="backup-stat-label">Consultations</div>
+          </div>
+          <div class="backup-stat-box">
+            <div id="audit-kits-count" class="backup-stat-val">0</div>
+            <div class="backup-stat-label">Clinical Kits</div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 8px;">
+          Select Restore Mode:
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button type="button" class="btn btn-primary" onclick="confirmExecuteRestore('merge')" style="text-align: left; padding: 10px 14px; display: flex; flex-direction: column;">
+            <div style="font-weight: 700; font-size: 0.88rem;">🔀 Smart Merge (Recommended)</div>
+            <div style="font-size: 0.74rem; opacity: 0.9; margin-top: 2px;">Preserves existing local records and safely adds new patients &amp; visits from the backup.</div>
+          </button>
+
+          <button type="button" class="btn btn-outline" onclick="confirmExecuteRestore('replace')" style="text-align: left; padding: 10px 14px; display: flex; flex-direction: column; border-color: #fca5a5; color: #991b1b; background: #fef2f2;">
+            <div style="font-weight: 700; font-size: 0.88rem;">⚠️ Full Replace (New Device Setup)</div>
+            <div style="font-size: 0.74rem; color: #7f1d1d; margin-top: 2px;">Overwrites all local records with this backup file. Useful when switching phones.</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <!-- MODAL: Confirm Permanent Delete -->
+  <div id="perm-delete-modal" class="modal-overlay" style="z-index: 2000050;">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-header" style="background: #fef2f2; border-bottom: 1px solid #fee2e2;">
+        <h3 style="color: #991b1b; font-size: 1.05rem; margin: 0; display: flex; align-items: center; gap: 6px;">
+          <span>⚠️ Permanently Delete Patient</span>
+        </h3>
+        <button class="modal-close" onclick="closePermDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px;">
+        <p style="font-size: 0.88rem; color: #334155; margin-bottom: 12px;">
+          Are you sure you want to permanently delete <strong id="perm-delete-patient-name" style="color: #b91c1c;">this patient</strong> and <strong>all their past consultations</strong>?
+        </p>
+        <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 8px; padding: 10px; font-size: 0.8rem; color: #9f1239; margin-bottom: 12px;">
+          ⛔ <strong>Warning:</strong> This action cannot be undone. All prescription slips and history will be wiped from this device.
+        </div>
+        <input type="hidden" id="perm-delete-patient-id" value="">
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="closePermDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="executePermDelete()" style="background: #dc2626; border-color: #dc2626;">🗑️ Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add / Edit Doctor Ranking Rule -->
+  <div id="doctor-rule-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 id="doctor-rule-modal-title" style="margin: 0; color: #1d4ed8; font-size: 1.1rem; display: flex; align-items: center; gap: 6px;">
+          <span>⚡ Add Medicine Preference Rule</span>
+        </h3>
+        <button class="modal-close" onclick="closeDoctorRuleModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px 20px;">
+        <input type="hidden" id="rule-edit-id">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="font-weight: 700; color: #0f172a;">When Patient Has Symptom or Complaint <span style="color:#ef4444;">*</span></label>
+          <input type="text" id="rule-edit-symptom" class="form-control" placeholder="e.g. Fever, Cough, Nausea, Headache...">
+          <div class="quick-tags" style="margin-top: 4px;">
+            <span class="tag-chip" onclick="document.getElementById('rule-edit-symptom').value = 'Fever'">Fever</span>
+            <span class="tag-chip" onclick="document.getElementById('rule-edit-symptom').value = 'Cough'">Cough</span>
+            <span class="tag-chip" onclick="document.getElementById('rule-edit-symptom').value = 'Sore Throat'">Sore Throat</span>
+            <span class="tag-chip" onclick="document.getElementById('rule-edit-symptom').value = 'Abdominal Pain'">Abdominal Pain</span>
+            <span class="tag-chip" onclick="document.getElementById('rule-edit-symptom').value = 'Headache'">Headache</span>
+            <span class="tag-chip" onclick="document.getElementById('rule-edit-symptom').value = 'Nausea / Vomiting'">Nausea</span>
+          </div>
+        </div>
+
+        <label style="font-weight: 700; color: #0f172a; margin-bottom: 4px; display: block;">
+          Rank Your Preferred Medications <small style="color: #64748b; font-weight: normal;">(Top 1 appears first, then 2, etc.)</small>
+        </label>
+        
+        <div id="rule-medicines-rows" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+          <!-- Dynamically added preference rows -->
+        </div>
+
+        <button type="button" class="btn btn-outline btn-xs" onclick="addRuleMedicineInputRow()" style="margin-bottom: 14px;">
+          + Add Another Ranked Medicine
+        </button>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+          <button type="button" class="btn btn-outline" onclick="closeDoctorRuleModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveDoctorRule()">Save Rule</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING AI SCRIBE BUBBLE & MODAL DIALOG                                 -->
+  <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
+  <!-- FLOATING AI SCRIBE BUBBLE                                                  -->
+  <!-- ========================================================================= -->
+  <div id="ai-scribe-fab" class="ai-scribe-fab" onclick="openAiScribeModal()" title="DocEMR AI Scribe (Voice & Consultation Note)">
+    <div class="ai-fab-pulse"></div>
+    <div class="ai-fab-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="22"></line>
+      </svg>
+    </div>
+    <span class="ai-fab-label">AI Scribe</span>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SCREEN 1: AI SCRIBE INTAKE & IN-APP VOICE RECORDER MODAL                   -->
+  <!-- ========================================================================= -->
+  <div id="ai-scribe-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-dialog ai-scribe-dialog" style="max-width: 620px; max-height: 90vh; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      
+      <!-- Top Modal Header -->
+      <div class="modal-header" style="background: linear-gradient(135deg, #042f2e, #0f766e); color: #fff; padding: 14px 18px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: #14b8a6; color: #042f2e; width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px;">
+            ✨
+          </div>
+          <div>
+            <h3 style="margin: 0; font-size: 1.12rem; color: #fff; font-weight: 700;">DocEMR AI Scribe</h3>
+            <div style="font-size: 0.74rem; color: #99f6e4;">Voice Dictation &amp; Clinical Consultation Intake</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeAiScribeModal()" style="color: #fff; opacity: 0.85; font-size: 22px;">&times;</button>
+      </div>
+
+      <!-- Scrollable Modal Body -->
+      <div class="modal-body" style="padding: 16px 18px; overflow-y: auto; flex: 1;">
+
+        <!-- Section 1: Patient Assignment (Populated from appData.patients) -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-weight: 700; font-size: 0.82rem; color: #0f172a; margin: 0;">
+              👤 Patient Assignment <small style="color: #64748b; font-weight: normal;">(Choose patient or dictation sandbox)</small>
+            </label>
+            <button type="button" class="btn btn-outline btn-xs" onclick="openPatientModalFromScribe()" style="font-size: 0.72rem; padding: 2px 8px;">
+              + New Patient
+            </button>
+          </div>
+          <select id="ai-scribe-patient-select" class="form-control" onchange="onAiScribePatientChange(this.value)" style="font-size: 0.88rem; font-weight: 600; padding: 8px 10px;">
+            <option value="">-- No Patient Assigned (Quick Sandbox / Free Dictation) --</option>
+          </select>
+        </div>
+
+        <!-- Section 2: Output Format Selection (Compact Dropdown) -->
+        <div style="margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <label for="ai-output-format-select" style="font-weight: 700; font-size: 0.82rem; color: #0f172a; margin: 0;">
+              📋 Output Format
+            </label>
+            <span id="ai-selected-format-badge" class="badge badge-primary" style="font-size: 0.72rem; padding: 2px 8px;">EKA EMR Format</span>
+          </div>
+
+          <select id="ai-output-format-select" class="form-control" style="font-weight: 600; font-size: 0.88rem; border: 1.5px solid #0d9488; border-radius: 8px; padding: 8px 12px; background: #f0fdfa; color: #0f766e;" onchange="onAiFormatSelectChanged(this.value)">
+            <optgroup label="General Formats">
+              <option value="EKA_EMR" selected>EKA EMR Format (Auto-populate Rx, Vitals &amp; Chips)</option>
+              <option value="SOAP">SOAP Detailed (Subjective, Objective, Assessment, Plan)</option>
+              <option value="CLINICAL_NOTES">Clinical Notes</option>
+              <option value="GP_OPD">General Physician OPD Consultation Note</option>
+              <option value="INPATIENT">General Inpatient Admission Template</option>
+              <option value="PATIENT_HISTORY">Patient Medical History</option>
+              <option value="MEETING_NOTES">Meeting Notes</option>
+            </optgroup>
+            <optgroup label="Specialty Formats">
+              <option value="HOMEOPATHY">Homeopathy OPD Consultation (Classical Case Taking)</option>
+              <option value="DIABETOLOGY">Diabetology OPD Consultation Note</option>
+              <option value="OBGYN">OB/GYN Consultation Template</option>
+              <option value="OPHTHALMOLOGY">Ophthalmology Consultation Template</option>
+              <option value="NEUROLOGY">Neurology OPD Consultation Note</option>
+              <option value="CARDIOLOGY">Cardiology OPD Consultation Note</option>
+              <option value="ORTHOPEDICS">Orthopedics Consultation Template</option>
+              <option value="DERMATOLOGY">Dermatology Consultation Template</option>
+              <option value="ONCOLOGY">Oncology Consultation Template</option>
+              <option value="SURGERY">General Surgery Consultation Template</option>
+              <option value="PEDIATRIC">Pediatric Consultation Template</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- Section 3: In-App Voice Dictation & Text Box -->
+        <div style="margin-bottom: 12px;">
+          <!-- Quick Preset Chips -->
+          <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 8px; padding-bottom: 3px;">
+            <button type="button" class="ai-preset-chip" onclick="loadAiPreset('dyspepsia')">⚡ पेट में दर्द &amp; उल्टी</button>
+            <button type="button" class="ai-preset-chip" onclick="loadAiPreset('fever')">⚡ Fever &amp; Cough 3 Days</button>
+            <button type="button" class="ai-preset-chip" onclick="loadAiPreset('diabetes')">⚡ Diabetes &amp; HTN Follow-up</button>
+            <button type="button" class="ai-preset-chip" onclick="loadAiPreset('headache')">⚡ Migraine &amp; Fatigue</button>
+          </div>
+
+          <div style="position: relative;">
+            <textarea id="ai-scribe-input" class="form-control" rows="4" oninput="onAiScribeManualEdit()" placeholder="Speak in Hindi/English or type clinical notes (e.g. पेट में बहुत दर्द है, उल्टी आती है, BP 130/80, Tab. Dolo 650 1-0-1)..." style="padding-right: 64px; font-size: 0.92rem; border-radius: 12px; border: 2px solid #cbd5e1; line-height: 1.5;"></textarea>
+            
+            <div style="position: absolute; right: 8px; top: 8px; display: flex; align-items: center; gap: 6px;">
+              <!-- Prominent In-App Mic Button -->
+              <button type="button" id="ai-scribe-mic-btn" class="ai-mic-btn" onclick="toggleAiVoiceRecording()" title="Tap to Start / Stop Continuous Voice Dictation" style="width: 44px; height: 44px; border-radius: 50%; background: #0f766e; color: #fff; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(15,118,110,0.35); cursor: pointer; transition: all 0.2s ease;">
+                <span id="ai-mic-icon" style="display:flex;align-items:center;justify-content:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Professional In-App Live Waveform & Recording Indicator -->
+          <div id="ai-recording-status-bar" style="display: none; align-items: center; justify-content: space-between; margin-top: 8px; background: #fef2f2; border: 1px solid #fca5a5; padding: 8px 12px; border-radius: 10px; font-size: 0.82rem;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="ai-rec-dot" style="width: 10px; height: 10px; background: #ef4444; border-radius: 50%; display: inline-block; animation: aiPulse 1s infinite; transition: transform 0.12s ease;"></span>
+              <span id="ai-rec-timer" style="font-weight: 800; color: #b91c1c;">00:00</span>
+              <span id="ai-rec-status-text" style="color: #991b1b; font-weight: 700;">Continuous listening... Tap mic to stop</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span id="ai-audio-quality-badge" style="font-weight: 700; color: #0f766e; background: #ccfbf1; padding: 2px 7px; border-radius: 4px; font-size: 0.72rem;">Live</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional Gemini Cloud AI Key Setting -->
+        <div style="margin-bottom: 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <div style="flex: 1; display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 13px;">🤖</span>
+            <input type="password" id="ai-gemini-key" placeholder="Gemini API Key (Optional: for Google Cloud AI reasoning)" style="width: 100%; border: none; background: transparent; font-size: 0.76rem; outline: none;" onchange="saveGeminiApiKey()">
+          </div>
+          <button type="button" class="btn btn-outline btn-xs" onclick="saveGeminiApiKey()" style="font-size: 0.7rem; padding: 3px 8px; white-space: nowrap;">Save Key</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn btn-primary" id="ai-process-btn" onclick="processAiScribeInput()" style="flex: 2; padding: 12px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; background: #0f766e; border-color: #0f766e; box-shadow: 0 4px 12px rgba(15,118,110,0.25); border-radius: 10px;">
+            <span>✨ Generate Clinical Note &amp; Rx</span>
+          </button>
+          <button type="button" class="btn btn-outline" onclick="clearAiScribeInput()" style="flex: 1; padding: 12px; font-size: 0.88rem; border-radius: 10px;">
+            Clear
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- SCREEN 2: DEDICATED FULL-SCREEN SESSION OUTPUT (EkaScribe Screenshot 1)   -->
+  <!-- ========================================================================= -->
+  <div id="screen-session-output" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000000; background: #ffffff; overflow-y: auto; flex-direction: column;">
+    
+    <!-- Top App Bar (Screenshot 1: Back arrow, Session Output, Audio quality, Actions) -->
+    <div style="position: sticky; top: 0; z-index: 10; background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button type="button" onclick="closeSessionOutputScreen()" style="background: none; border: none; font-size: 20px; color: #1e293b; cursor: pointer; padding: 4px; display: flex; align-items: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <div>
+          <div style="font-weight: 800; font-size: 1.15rem; color: #0f172a; line-height: 1.2;">Session Output</div>
+          <div style="font-size: 0.78rem; color: #64748b;">
+            Audio quality: <span style="color: #059669; font-weight: 700;">Good (0.85)</span> <span style="font-size: 12px; color: #94a3b8;">ℹ️</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px; color: #475569;">
+        <!-- Download Icon -->
+        <span onclick="copyAiOutputToClipboard()" title="Copy findings" style="cursor: pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </span>
+        <!-- Share Icon -->
+        <span onclick="copyAiOutputToClipboard()" title="Share Note" style="cursor: pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </span>
+        <!-- 3-Dots Menu -->
+        <span onclick="openAiScribeModal()" title="Edit dictation" style="cursor: pointer; font-size: 18px; font-weight: bold;">⋮</span>
+      </div>
+    </div>
+
+    <!-- Screen 2 Main Body -->
+    <div style="padding: 16px; max-width: 680px; margin: 0 auto; width: 100%; flex: 1;">
+
+      <!-- Active Patient Assignment & Quick New Patient Creation (Screen 2) -->
+      <div style="background: #ffffff; border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 200px;">
+          <span style="font-size: 1.1rem;">👤</span>
+          <div style="flex: 1;">
+            <div style="font-size: 0.72rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Assigned Patient:</div>
+            <select id="so-patient-select" class="form-control" onchange="onSessionOutputPatientChange(this.value)" style="font-size: 0.85rem; font-weight: 700; padding: 4px 8px; height: 32px; border-color: #cbd5e1; margin-top: 2px;">
+              <option value="">-- No Patient Assigned (Quick Sandbox) --</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline btn-xs" onclick="openPatientModalFromScribe('so')" style="font-size: 0.75rem; padding: 5px 10px; font-weight: 700; color: #0f766e; border-color: #0f766e; white-space: nowrap;">
+          + New Patient
+        </button>
+      </div>
+
+      <!-- Real Voice Audio Player Card (Screenshot 1 & 5) -->
+      <div style="background: #ffffff; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 1.15rem; font-weight: 800; color: #1e293b;">Session</span>
+          <span style="font-size: 0.88rem; color: #64748b; display: flex; align-items: center; gap: 4px;">
+            🕒 <span id="so-audio-total-time">0:00</span>
+          </span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px; margin-top: 4px;">
+          <!-- Play / Pause Button with real voice audio -->
+          <button type="button" id="so-play-btn" onclick="toggleAudioPlayback()" style="width: 44px; height: 44px; border-radius: 50%; background: #dbeafe; color: #2563eb; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(37,99,235,0.2);">
+            <span id="so-play-icon">▶</span>
+          </button>
+          
+          <!-- Audio Track Progress Scrub Bar -->
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <input type="range" id="so-audio-slider" min="0" max="0" value="0" oninput="seekAudioPlayback(this.value)" style="width: 100%; height: 6px; border-radius: 3px; background: #e2e8f0; outline: none; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: #64748b; margin-top: 4px;">
+              <span id="so-audio-current-time">0:00</span>
+              <span id="so-audio-end-time">0:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Format Switcher Pills ([+] [Eka EMR Format] [Clinical Notes] [Transcript]) -->
+      <div style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 16px;">
+        <button type="button" class="ai-pill-btn" onclick="openOutputFormatSelection()" title="Change Format" style="padding: 7px 12px; font-weight: 800; color: #2563eb; border: 1.5px solid #2563eb; background: #eff6ff; border-radius: 8px;">＋</button>
+        <button type="button" class="ai-pill-btn active" id="so-pill-emr" onclick="switchAiOutputTab('emr')">Eka EMR Format</button>
+        <button type="button" class="ai-pill-btn" id="so-pill-clinical" onclick="switchAiOutputTab('clinical')">Clinical Notes</button>
+        <button type="button" class="ai-pill-btn" id="so-pill-transcript" onclick="switchAiOutputTab('transcript')">Transcript</button>
+      </div>
+
+      <!-- Dynamic Tab 1: Eka EMR Format (Screenshot 1 & 5) -->
+      <div id="so-pane-emr" class="ai-output-pane active">
+        
+        <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin-bottom: 10px; letter-spacing: 0.5px;">
+          SYMPTOMS
+        </div>
+        
+        <!-- Extracted Symptoms Cards (matching screenshot 5: abdominal pain, loss of appetite, vomiting, etc.) -->
+        <div id="so-symptoms-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
+          <!-- Dynamic cards injected here -->
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin-bottom: 10px; letter-spacing: 0.5px;">
+          MEDICATIONS
+        </div>
+        
+        <!-- Extracted Medications Cards -->
+        <div id="so-meds-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 30px;">
+          <!-- Dynamic meds injected here -->
+        </div>
+
+      </div>
+
+      <!-- Dynamic Tab 2: Clinical Narrative Notes -->
+      <div id="so-pane-clinical" class="ai-output-pane" style="display: none; margin-bottom: 30px;">
+        <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin-bottom: 10px;">
+          CONSULTATION RECORD
+        </div>
+        <div id="so-clinical-notes-content" style="font-family: inherit; font-size: 0.92rem; line-height: 1.6; color: #1e293b; background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 10px; white-space: pre-wrap;"></div>
+      </div>
+
+      <!-- Dynamic Tab 3: Raw Transcript (Hindi/English) -->
+      <div id="so-pane-transcript" class="ai-output-pane" style="display: none; margin-bottom: 30px;">
+        <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; color: #0f172a; margin-bottom: 10px;">
+          TRANSCRIPT
+        </div>
+        <div id="so-transcript-content" style="font-size: 0.95rem; line-height: 1.6; color: #1e293b; background: #f8fafc; border: 1px solid #e2e8f0; padding: 16px; border-radius: 12px; margin-bottom: 12px;"></div>
+        <button type="button" class="btn btn-outline" onclick="copyAiOutputToClipboard()" style="width: 100%; padding: 10px; font-weight: 600;">📋 Copy Transcript</button>
+      </div>
+
+    </div>
+
+    <!-- Bottom Sticky Bar with Big Blue Copy to Rx Button (Screenshot 1 & 5) -->
+    <div style="position: sticky; bottom: 0; background: #ffffff; border-top: 1px solid #e2e8f0; padding: 14px 16px; box-shadow: 0 -4px 12px rgba(0,0,0,0.05);">
+      <button type="button" class="btn btn-primary" onclick="copyAiToActiveRx()" style="width: 100%; max-width: 680px; margin: 0 auto; display: block; padding: 14px; font-weight: 800; font-size: 1.05rem; background: #2563eb; border-color: #2563eb; border-radius: 28px; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">
+        Copy to Rx
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- Main Application Logic Script (Loaded after all DOM nodes) -->
+  
+  <!-- MODAL: A-Z Drug & Injection Formulary Library (Study & Instant Prescribe) -->
+  <div id="drug-library-modal" class="modal-overlay" style="z-index: 2000040;">
+    <div class="modal-dialog" style="max-width: 860px; width: 95%; max-height: 90vh; display: flex; flex-direction: column;">
+      <div class="modal-header" style="background: linear-gradient(135deg, #0d9488, #0f766e); color: #ffffff; padding: 12px 18px;">
+        <h3 style="margin: 0; color: #ffffff; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+          <span>📚 A-Z Clinical Formulary &amp; Drug Library</span>
+        </h3>
+        <button class="modal-close" onclick="closeDrugLibraryModal()" style="color: #ffffff; opacity: 0.9;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 14px 18px; overflow-y: auto; flex: 1;">
+        <!-- Search and Filter Bar -->
+        <div style="display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+          <input type="text" id="formulary-search-input" class="form-control" placeholder="🔍 Search drug name, generic salt, symptom (e.g. fever, vomiting, pain), or Jan Aushadhi..." oninput="filterDrugLibrary()" style="flex: 1; min-width: 260px; font-size: 0.92rem;">
+        </div>
+        <!-- Category Filter Pills -->
+        <div class="formulary-category-pills" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px;">
+          <button type="button" id="formulary-all-pill" class="tag-chip active chip-selected" data-cat="all" onclick="setFormularyCategory('all', this)">All Formulary (500)</button>
+          <button type="button" class="tag-chip" data-cat="Oral Tablets &amp; Caps" onclick="setFormularyCategory('Oral Tablets & Caps', this)">💊 Tablets &amp; Caps</button>
+          <button type="button" class="tag-chip" data-cat="Injections &amp; IV Fluids" onclick="setFormularyCategory('Injections & IV Fluids', this)">💉 Injections &amp; IV Fluids</button>
+          <button type="button" class="tag-chip" data-cat="Syrups &amp; Drops" onclick="setFormularyCategory('Syrups & Drops', this)">🧴 Syrups &amp; Suspensions</button>
+          <button type="button" class="tag-chip" data-cat="Consumables &amp; Syringes" onclick="setFormularyCategory('Consumables & Syringes', this)">🩹 Syringes &amp; IV Sets</button>
+        </div>
+        <div id="formulary-results-count" style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px; font-weight: 600;">Showing 140 medicines, injectables &amp; supplies</div>
+        <div id="formulary-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px;">
+          <!-- Dynamically populated cards -->
+        </div>
+      </div>
+      <div class="modal-footer" style="padding: 10px 18px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <span style="font-size: 0.78rem; color: #64748b;">🇮🇳 Integrated Jan Aushadhi (PMBJP) &amp; NLEM standard dosages</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="checkForOtaUpdates(true)" style="border-color: #0d9488; color: #0f766e; font-weight: 700;">🔄 Sync Data</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="closeDrugLibraryModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=4200"></script>
+</body>
+</html>
