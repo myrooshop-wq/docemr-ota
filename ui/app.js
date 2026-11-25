@@ -11433,7 +11433,7 @@ function updateClinicHeader() {
   const gDoc = document.getElementById("dashboard-greeting-name");
   if (gDoc) gDoc.textContent = doctorName;
 
-  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.5";
+  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.7";
   const cleanVer = String(activeVer).replace(/^v/i, "").replace(/-baseline$/i, "");
   const hVer = document.getElementById("header-app-version");
   if (hVer) hVer.textContent = "v" + cleanVer;
@@ -13988,6 +13988,7 @@ function openCreateKitModal(prefill = {}) {
   // Initialize symptom chips & autocomplete inside Kit Edit Modal
   updateKitSymptomsChips();
   setupKitSymptomsAutocomplete();
+  setupKitDiagnosisAutocomplete();
 
   document.getElementById("kit-edit-modal").classList.add("active");
 }
@@ -14053,6 +14054,190 @@ function updateKitSymptomsChips() {
     chip.onclick = () => toggleKitSymptomChip(item.name);
     container.appendChild(chip);
   });
+}
+
+
+function setupKitDiagnosisAutocomplete() {
+  const input = document.getElementById("kit-edit-diag");
+  const resultsBox = document.getElementById("kit-diag-autocomplete-results");
+  if (!input || !resultsBox) return;
+  if (input.getAttribute && input.getAttribute("data-ac-attached") === "true") return;
+  if (input.setAttribute) input.setAttribute("data-ac-attached", "true");
+
+  function doSearch() {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      resultsBox.classList.remove("active");
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    const diagPool = [];
+    const seen = new Set();
+    if (typeof POPULAR_DIAGNOSIS_LIST !== "undefined") {
+      POPULAR_DIAGNOSIS_LIST.forEach(d => {
+        const name = typeof d === "string" ? d : d.name;
+        if (name && !seen.has(name.toLowerCase())) {
+          seen.add(name.toLowerCase());
+          diagPool.push({ name, category: (typeof d === "object" && d.category) || "Diagnosis", tags: (typeof d === "object" && d.tags) || [] });
+        }
+      });
+    }
+    if (typeof CLINICAL_KNOWLEDGE_BASE !== "undefined") {
+      CLINICAL_KNOWLEDGE_BASE.forEach(kb => {
+        if (kb.diagnosis && !seen.has(kb.diagnosis.toLowerCase())) {
+          seen.add(kb.diagnosis.toLowerCase());
+          diagPool.push({ name: kb.diagnosis, category: "Clinical Protocol", tags: kb.tags || [] });
+        }
+      });
+    }
+
+    const matches = diagPool.filter(d =>
+      d.name.toLowerCase().includes(q) ||
+      d.category.toLowerCase().includes(q) ||
+      (Array.isArray(d.tags) && d.tags.some(t => String(t).toLowerCase().includes(q)))
+    ).slice(0, 8);
+
+    if (matches.length === 0) {
+      resultsBox.classList.remove("active");
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    resultsBox.innerHTML = "";
+    matches.forEach(item => {
+      const el = document.createElement("div");
+      el.className = "autocomplete-item";
+      el.innerHTML = `<strong>${highlightQuery(item.name, q)}</strong><small style="color: var(--primary-dark); font-weight: 600;">${escapeHtml(item.category)}</small>`;
+      el.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        input.value = item.name;
+        resultsBox.classList.remove("active");
+        resultsBox.innerHTML = "";
+      });
+      resultsBox.appendChild(el);
+    });
+    resultsBox.classList.add("active");
+  }
+
+  input.addEventListener("input", doSearch);
+  input.addEventListener("blur", () => { setTimeout(() => resultsBox.classList.remove("active"), 250); });
+}
+
+function attachKitMedicineAutocomplete(row) {
+  const input = row.querySelector(".kit-med-name");
+  const resultsBox = row.querySelector(".kit-med-autocomplete-results");
+  if (!input || !resultsBox) return;
+
+  function doSearch() {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      resultsBox.classList.remove("active");
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    const matches = DRUG_DATABASE.filter(d =>
+      (d.name && d.name.toLowerCase().includes(q)) ||
+      (d.generic && d.generic.toLowerCase().includes(q)) ||
+      (d.cat && d.cat.toLowerCase().includes(q))
+    ).slice(0, 8);
+
+    if (matches.length === 0) {
+      resultsBox.classList.remove("active");
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    resultsBox.innerHTML = "";
+    matches.forEach(drug => {
+      const el = document.createElement("div");
+      el.className = "autocomplete-item";
+      el.innerHTML = `<strong>${highlightQuery(drug.name, q)}</strong><small style="color: #64748b;">${escapeHtml(drug.generic || "")} &bull; ${escapeHtml(drug.dose || "")}</small>`;
+      el.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        input.value = drug.name;
+        const doseEl = row.querySelector(".kit-med-dose");
+        const timingEl = row.querySelector(".kit-med-timing");
+        const durEl = row.querySelector(".kit-med-duration");
+        if (doseEl && drug.dose) doseEl.value = drug.dose;
+        if (timingEl && drug.timing) timingEl.value = drug.timing;
+        if (durEl && drug.duration) durEl.value = drug.duration;
+        resultsBox.classList.remove("active");
+        resultsBox.innerHTML = "";
+      });
+      resultsBox.appendChild(el);
+    });
+    resultsBox.classList.add("active");
+  }
+
+  input.addEventListener("input", doSearch);
+  input.addEventListener("blur", () => { setTimeout(() => resultsBox.classList.remove("active"), 250); });
+}
+
+function setupRuleSymptomAutocomplete() {
+  const input = document.getElementById("rule-edit-symptom");
+  const resultsBox = document.getElementById("rule-symptom-autocomplete-results");
+  if (!input || !resultsBox) return;
+  if (input.getAttribute && input.getAttribute("data-ac-attached") === "true") return;
+  if (input.setAttribute) input.setAttribute("data-ac-attached", "true");
+
+  function doSearch() {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      resultsBox.classList.remove("active");
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    const symPool = [];
+    const seen = new Set();
+    if (typeof POPULAR_SYMPTOMS_LIST !== "undefined") {
+      POPULAR_SYMPTOMS_LIST.forEach(s => {
+        if (s && s.name && !seen.has(s.name.toLowerCase())) {
+          seen.add(s.name.toLowerCase());
+          symPool.push(s);
+        }
+      });
+    }
+    if (typeof DEFAULT_OPD_SYMPTOMS !== "undefined") {
+      DEFAULT_OPD_SYMPTOMS.forEach(name => {
+        if (name && !seen.has(name.toLowerCase())) {
+          seen.add(name.toLowerCase());
+          symPool.push({ name, category: "OPD Symptom", synonyms: [] });
+        }
+      });
+    }
+
+    const matches = symPool.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      (Array.isArray(s.synonyms) && s.synonyms.some(syn => syn.toLowerCase().includes(q)))
+    ).slice(0, 8);
+
+    if (matches.length === 0) {
+      resultsBox.classList.remove("active");
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    resultsBox.innerHTML = "";
+    matches.forEach(item => {
+      const el = document.createElement("div");
+      el.className = "autocomplete-item";
+      el.innerHTML = `<strong>${highlightQuery(item.name, q)}</strong><small style="color: var(--primary-dark); font-weight: 600;">${escapeHtml(item.category || "Symptom")}</small>`;
+      el.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        input.value = item.name;
+        resultsBox.classList.remove("active");
+        resultsBox.innerHTML = "";
+      });
+      resultsBox.appendChild(el);
+    });
+    resultsBox.classList.add("active");
+  }
+
+  input.addEventListener("input", doSearch);
+  input.addEventListener("blur", () => { setTimeout(() => resultsBox.classList.remove("active"), 250); });
 }
 
 function setupKitSymptomsAutocomplete() {
@@ -14135,13 +14320,17 @@ function addKitMedicineRow(data = {}) {
   const row = document.createElement("div");
   row.className = "kit-med-row";
   row.innerHTML = `
-    <input type="text" class="form-control kit-med-name" placeholder="Drug name & strength (e.g. Tab. Augmentin 625)" value="${escapeHtml(data.name || '')}">
+    <div class="autocomplete-container" style="flex: 2; min-width: 180px;">
+      <input type="text" class="form-control kit-med-name" placeholder="Drug name & strength (e.g. Tab. Augmentin 625)" value="${escapeHtml(data.name || '')}" autocomplete="off">
+      <div class="autocomplete-results kit-med-autocomplete-results"></div>
+    </div>
     <input type="text" class="form-control kit-med-dose" placeholder="1-0-1" value="${escapeHtml(data.dose || '1-0-1')}">
     <input type="text" class="form-control kit-med-timing" placeholder="After food" value="${escapeHtml(data.timing || 'After food')}">
     <input type="text" class="form-control kit-med-duration" placeholder="5 days" value="${escapeHtml(data.duration || '5 days')}">
     <button type="button" class="btn-remove-row" onclick="this.closest('.kit-med-row').remove()" title="Remove medicine">&times;</button>
   `;
   container.appendChild(row);
+  attachKitMedicineAutocomplete(row);
 }
 
 function saveDoctorKit() {
@@ -16437,6 +16626,7 @@ function openAddDoctorRuleModal() {
   addRuleMedicineInputRow("Tab. Dolo 650mg");
   addRuleMedicineInputRow("Tab. Paracetamol 650mg");
 
+  setupRuleSymptomAutocomplete();
   document.getElementById("doctor-rule-modal").classList.add("active");
 }
 
@@ -16452,6 +16642,7 @@ function openEditDoctorRuleModal(ruleId) {
   rows.innerHTML = "";
   (rule.medicines || []).forEach(m => addRuleMedicineInputRow(m));
 
+  setupRuleSymptomAutocomplete();
   document.getElementById("doctor-rule-modal").classList.add("active");
 }
 
@@ -16846,7 +17037,7 @@ function switchToWebSpeechFallback() {
       webSpeechInstance = sr;
       sr.continuous = true;
       sr.interimResults = true;
-      sr.lang = "hi-IN";
+      sr.lang = "en-IN";
       sr.onresult = function(event) {
         let interim = "";
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -17199,7 +17390,7 @@ function startInAppRecording() {
         webSpeechInstance = sr;
         sr.continuous = true;
         sr.interimResults = true;
-        sr.lang = "hi-IN";
+        sr.lang = "en-IN";
         sr.onresult = function(event) {
           let interim = "";
           for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -19015,7 +19206,7 @@ const OTA_STORAGE_KEYS = {
 };
 
 const DEFAULT_OTA_MANIFEST_URL = "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ota-manifest.json";
-const OTA_BASELINE_VERSION = "4.3.5-baseline";
+const OTA_BASELINE_VERSION = "4.3.7-baseline";
 let _otaBaselineSnapshot = null;
 
 function captureOtaBaselines() {
