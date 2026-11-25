@@ -11433,7 +11433,7 @@ function updateClinicHeader() {
   const gDoc = document.getElementById("dashboard-greeting-name");
   if (gDoc) gDoc.textContent = doctorName;
 
-  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.7";
+  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.8";
   const cleanVer = String(activeVer).replace(/^v/i, "").replace(/-baseline$/i, "");
   const hVer = document.getElementById("header-app-version");
   if (hVer) hVer.textContent = "v" + cleanVer;
@@ -14109,12 +14109,14 @@ function setupKitDiagnosisAutocomplete() {
       const el = document.createElement("div");
       el.className = "autocomplete-item";
       el.innerHTML = `<strong>${highlightQuery(item.name, q)}</strong><small style="color: var(--primary-dark); font-weight: 600;">${escapeHtml(item.category)}</small>`;
-      el.addEventListener("mousedown", (e) => {
+      const pickItem = (e) => {
         e.preventDefault();
         input.value = item.name;
         resultsBox.classList.remove("active");
         resultsBox.innerHTML = "";
-      });
+      };
+      el.addEventListener("pointerdown", pickItem);
+      el.addEventListener("mousedown", pickItem);
       resultsBox.appendChild(el);
     });
     resultsBox.classList.add("active");
@@ -14163,6 +14165,7 @@ function attachKitMedicineAutocomplete(row) {
         if (doseEl && drug.dose) doseEl.value = drug.dose;
         if (timingEl && drug.timing) timingEl.value = drug.timing;
         if (durEl && drug.duration) durEl.value = drug.duration;
+        if (typeof syncRowChips === "function") syncRowChips(row);
         resultsBox.classList.remove("active");
         resultsBox.innerHTML = "";
       });
@@ -14225,12 +14228,14 @@ function setupRuleSymptomAutocomplete() {
       const el = document.createElement("div");
       el.className = "autocomplete-item";
       el.innerHTML = `<strong>${highlightQuery(item.name, q)}</strong><small style="color: var(--primary-dark); font-weight: 600;">${escapeHtml(item.category || "Symptom")}</small>`;
-      el.addEventListener("mousedown", (e) => {
+      const pickItem = (e) => {
         e.preventDefault();
         input.value = item.name;
         resultsBox.classList.remove("active");
         resultsBox.innerHTML = "";
-      });
+      };
+      el.addEventListener("pointerdown", pickItem);
+      el.addEventListener("mousedown", pickItem);
       resultsBox.appendChild(el);
     });
     resultsBox.classList.add("active");
@@ -14317,20 +14322,72 @@ function addKitMedicineRow(data = {}) {
   const container = document.getElementById("kit-medicine-rows");
   if (!container) return;
 
+  const dose = String(data.dose || "1-0-1");
+  const timing = String(data.timing || "After food");
+  const duration = String(data.duration || "5 days");
+
   const row = document.createElement("div");
-  row.className = "kit-med-row";
+  row.className = "kit-med-row rx-row";
+  row.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; margin-bottom: 10px;";
   row.innerHTML = `
-    <div class="autocomplete-container" style="flex: 2; min-width: 180px;">
-      <input type="text" class="form-control kit-med-name" placeholder="Drug name & strength (e.g. Tab. Augmentin 625)" value="${escapeHtml(data.name || '')}" autocomplete="off">
-      <div class="autocomplete-results kit-med-autocomplete-results"></div>
+    <div style="display: flex; align-items: flex-start; gap: 8px;">
+      <div class="rx-row-col rx-col-name" style="flex: 1; min-width: 0;">
+        <div class="autocomplete-container">
+          <input type="text" class="form-control kit-med-name med-name" placeholder="Drug name & strength (e.g. Tab. Augmentin 625)" value="${escapeHtml(data.name || '')}" autocomplete="off">
+          <div class="autocomplete-results kit-med-autocomplete-results" style="z-index: 2000100;"></div>
+        </div>
+      </div>
+      <button type="button" class="btn-remove-row" onclick="this.closest('.kit-med-row').remove()" title="Remove medicine" style="flex-shrink: 0;">&times;</button>
     </div>
-    <input type="text" class="form-control kit-med-dose" placeholder="1-0-1" value="${escapeHtml(data.dose || '1-0-1')}">
-    <input type="text" class="form-control kit-med-timing" placeholder="After food" value="${escapeHtml(data.timing || 'After food')}">
-    <input type="text" class="form-control kit-med-duration" placeholder="5 days" value="${escapeHtml(data.duration || '5 days')}">
-    <button type="button" class="btn-remove-row" onclick="this.closest('.kit-med-row').remove()" title="Remove medicine">&times;</button>
+
+    <div class="rx-row-col rx-col-dosage">
+      <input type="text" class="form-control kit-med-dose med-dosage" placeholder="1-0-1" value="${escapeHtml(dose)}">
+      <div class="chip-group dosage-chips">
+        <span class="quick-chip ${dose === '1-0-1' ? 'active' : ''}" data-val="1-0-1" onclick="selectRowChip(this, 'dosage')">1-0-1</span>
+        <span class="quick-chip ${dose === '1-0-0' ? 'active' : ''}" data-val="1-0-0" onclick="selectRowChip(this, 'dosage')">1-0-0</span>
+        <span class="quick-chip ${dose === '0-0-1' ? 'active' : ''}" data-val="0-0-1" onclick="selectRowChip(this, 'dosage')">0-0-1</span>
+        <span class="quick-chip ${dose === '1-1-1' ? 'active' : ''}" data-val="1-1-1" onclick="selectRowChip(this, 'dosage')">1-1-1</span>
+        <span class="quick-chip ${dose.includes('SOS') ? 'active' : ''}" data-val="1-0-1 (SOS)" onclick="selectRowChip(this, 'dosage')">SOS</span>
+      </div>
+    </div>
+
+    <div class="rx-row-col rx-col-timing">
+      <input type="text" class="form-control kit-med-timing med-timing" placeholder="After food" value="${escapeHtml(timing)}">
+      <div class="chip-group timing-chips">
+        <span class="quick-chip ${timing.toLowerCase().includes('after') ? 'active' : ''}" data-val="After food" onclick="selectRowChip(this, 'timing')">After food</span>
+        <span class="quick-chip ${timing.toLowerCase().includes('before') ? 'active' : ''}" data-val="Before food" onclick="selectRowChip(this, 'timing')">Before food</span>
+        <span class="quick-chip ${timing.toLowerCase().includes('empty') ? 'active' : ''}" data-val="Empty stomach" onclick="selectRowChip(this, 'timing')">Empty stomach</span>
+        <span class="quick-chip ${timing.toLowerCase().includes('bed') || timing.toLowerCase().includes('night') ? 'active' : ''}" data-val="At bedtime" onclick="selectRowChip(this, 'timing')">Bedtime</span>
+      </div>
+    </div>
+
+    <div class="rx-row-col rx-col-duration">
+      <div class="duration-stepper-wrap">
+        <button type="button" class="duration-step-btn" onclick="stepDuration(this, -1)" title="Decrease 1 day">&minus;</button>
+        <input type="text" class="form-control kit-med-duration med-duration" placeholder="5 days" value="${escapeHtml(duration)}" style="text-align: center;">
+        <button type="button" class="duration-step-btn" onclick="stepDuration(this, 1)" title="Increase 1 day">+</button>
+      </div>
+      <div class="chip-group duration-chips">
+        <span class="quick-chip ${duration.includes('1') && !duration.includes('10') && !duration.includes('14') ? 'active' : ''}" data-val="1 day" onclick="selectRowChip(this, 'duration')">1d</span>
+        <span class="quick-chip ${duration.includes('2') ? 'active' : ''}" data-val="2 days" onclick="selectRowChip(this, 'duration')">2d</span>
+        <span class="quick-chip ${duration.includes('3') ? 'active' : ''}" data-val="3 days" onclick="selectRowChip(this, 'duration')">3d</span>
+        <span class="quick-chip ${duration.includes('5') ? 'active' : ''}" data-val="5 days" onclick="selectRowChip(this, 'duration')">5d</span>
+        <span class="quick-chip ${duration.includes('7') ? 'active' : ''}" data-val="7 days" onclick="selectRowChip(this, 'duration')">7d</span>
+        <span class="quick-chip ${duration.includes('10') ? 'active' : ''}" data-val="10 days" onclick="selectRowChip(this, 'duration')">10d</span>
+        <span class="quick-chip ${duration.includes('14') ? 'active' : ''}" data-val="14 days" onclick="selectRowChip(this, 'duration')">14d</span>
+        <span class="quick-chip ${duration.includes('30') || duration.includes('month') ? 'active' : ''}" data-val="30 days" onclick="selectRowChip(this, 'duration')">1m</span>
+      </div>
+    </div>
   `;
   container.appendChild(row);
   attachKitMedicineAutocomplete(row);
+
+  const dInput = row.querySelector(".med-dosage");
+  const tInput = row.querySelector(".med-timing");
+  const durInput = row.querySelector(".med-duration");
+  if (dInput && typeof syncRowChips === "function") dInput.addEventListener("input", () => syncRowChips(row));
+  if (tInput && typeof syncRowChips === "function") tInput.addEventListener("input", () => syncRowChips(row));
+  if (durInput && typeof syncRowChips === "function") durInput.addEventListener("input", () => syncRowChips(row));
 }
 
 function saveDoctorKit() {
@@ -16658,11 +16715,55 @@ function addRuleMedicineInputRow(defaultVal = "") {
   const row = document.createElement("div");
   row.style = "display: flex; align-items: center; gap: 8px;";
   row.innerHTML = `
-    <span style="font-size: 0.8rem; font-weight: 700; width: 50px; color: #1d4ed8;">#${currentCount}</span>
-    <input type="text" class="form-control rule-med-input" placeholder="Medicine name (e.g. Tab. Dolo 650mg)" value="${escapeHtml(defaultVal)}" style="flex:1;">
-    <button type="button" class="btn-remove-row" onclick="this.closest('div').remove()" style="padding: 2px 8px; font-size: 1.1rem;">&times;</button>
+    <span style="font-size: 0.8rem; font-weight: 700; width: 34px; color: #1d4ed8; flex-shrink: 0;">#${currentCount}</span>
+    <div class="autocomplete-container" style="flex: 1;">
+      <input type="text" class="form-control rule-med-input" placeholder="Medicine name (e.g. Tab. Dolo 650mg)" value="${escapeHtml(defaultVal)}" autocomplete="off">
+      <div class="autocomplete-results rule-med-autocomplete-results" style="z-index: 2000100;"></div>
+    </div>
+    <button type="button" class="btn-remove-row" onclick="this.closest('div').remove()" style="padding: 2px 8px; font-size: 1.1rem; flex-shrink: 0;">&times;</button>
   `;
   container.appendChild(row);
+
+  const input = row.querySelector(".rule-med-input");
+  const resultsBox = row.querySelector(".rule-med-autocomplete-results");
+  if (input && resultsBox) {
+    const doSearch = () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) {
+        resultsBox.classList.remove("active");
+        resultsBox.innerHTML = "";
+        return;
+      }
+      const matches = DRUG_DATABASE.filter(d =>
+        (d.name && d.name.toLowerCase().includes(q)) ||
+        (d.generic && d.generic.toLowerCase().includes(q)) ||
+        (d.cat && d.cat.toLowerCase().includes(q))
+      ).slice(0, 8);
+      if (matches.length === 0) {
+        resultsBox.classList.remove("active");
+        resultsBox.innerHTML = "";
+        return;
+      }
+      resultsBox.innerHTML = "";
+      matches.forEach(drug => {
+        const el = document.createElement("div");
+        el.className = "autocomplete-item";
+        el.innerHTML = `<strong>${highlightQuery(drug.name, q)}</strong><small style="color: #64748b;">${escapeHtml(drug.generic || "")}</small>`;
+        const pick = (e) => {
+          e.preventDefault();
+          input.value = drug.name;
+          resultsBox.classList.remove("active");
+          resultsBox.innerHTML = "";
+        };
+        el.addEventListener("pointerdown", pick);
+        el.addEventListener("mousedown", pick);
+        resultsBox.appendChild(el);
+      });
+      resultsBox.classList.add("active");
+    };
+    input.addEventListener("input", doSearch);
+    input.addEventListener("blur", () => { setTimeout(() => resultsBox.classList.remove("active"), 250); });
+  }
 }
 
 function saveDoctorRule() {
@@ -19206,7 +19307,7 @@ const OTA_STORAGE_KEYS = {
 };
 
 const DEFAULT_OTA_MANIFEST_URL = "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ota-manifest.json";
-const OTA_BASELINE_VERSION = "4.3.7-baseline";
+const OTA_BASELINE_VERSION = "4.3.8-baseline";
 let _otaBaselineSnapshot = null;
 
 function captureOtaBaselines() {
