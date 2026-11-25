@@ -11433,7 +11433,7 @@ function updateClinicHeader() {
   const gDoc = document.getElementById("dashboard-greeting-name");
   if (gDoc) gDoc.textContent = doctorName;
 
-  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.1";
+  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.2";
   const cleanVer = String(activeVer).replace(/^v/i, "").replace(/-baseline$/i, "");
   const hVer = document.getElementById("header-app-version");
   if (hVer) hVer.textContent = "v" + cleanVer;
@@ -15637,9 +15637,10 @@ function escapeHtml(text) {
 // ============================================================================
 // 11. BOOTSTRAP APPLICATION ON DOM READY
 // ============================================================================
-document.addEventListener("DOMContentLoaded", () => {
+function bootDocEMRApp() {
+  if (window.__docemrBooted) return;
   window.__docemrBooted = true;
-  initVitalsCollapseState();
+initVitalsCollapseState();
   updateClinicHeader();
   loadData();
   updateClinicHeader();
@@ -15653,8 +15654,10 @@ document.addEventListener("DOMContentLoaded", () => {
   renderPatientsTable();
   populateRxPatientSelect();
   updateDynamicDiagnosisChips();
+
   updateDynamicMedicationSuggestions();
-});
+}
+// Boot trigger moved to end of file so all const/let declarations are initialized
 
 
 function showPatientDetailDrawer(patientId) {
@@ -18946,7 +18949,7 @@ const OTA_STORAGE_KEYS = {
 };
 
 const DEFAULT_OTA_MANIFEST_URL = "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ota-manifest.json";
-const OTA_BASELINE_VERSION = "4.3.1-baseline";
+const OTA_BASELINE_VERSION = "4.3.2-baseline";
 let _otaBaselineSnapshot = null;
 
 function captureOtaBaselines() {
@@ -19343,8 +19346,8 @@ async function checkForOtaUpdates(manual = true) {
     applyOtaPayload(payload);
     updateOtaSyncStatusUI();
 
-    if (uiBundleUpdated) {
-      if (manual) showToast(`✨ Full UI & Data updated to v${manifest.version}! Reloading...`, "success");
+    if (uiBundleUpdated && manual) {
+      showToast(`✨ Full UI & Data updated to v${manifest.version}! Reloading...`, "success");
       setTimeout(() => { if (typeof window !== "undefined" && window.location) window.location.replace("bootstrap.html"); }, 1200);
     } else if (manual) {
       showToast(`✨ Updated to v${manifest.version} (${DRUG_DATABASE.length} meds synced)!`, "success");
@@ -19406,4 +19409,11 @@ function resetOtaToDefaults() {
   updateOtaSyncStatusUI();
 
   showToast("🔄 Restored built-in baseline clinical data.", "info");
+}
+
+// Final Boot Trigger
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bootDocEMRApp);
+} else {
+  bootDocEMRApp();
 }
