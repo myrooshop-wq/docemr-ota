@@ -11433,7 +11433,7 @@ function updateClinicHeader() {
   const gDoc = document.getElementById("dashboard-greeting-name");
   if (gDoc) gDoc.textContent = doctorName;
 
-  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.2";
+  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.3";
   const cleanVer = String(activeVer).replace(/^v/i, "").replace(/-baseline$/i, "");
   const hVer = document.getElementById("header-app-version");
   if (hVer) hVer.textContent = "v" + cleanVer;
@@ -18830,17 +18830,66 @@ function renderDrugLibrary() {
   const q = currentFormularySearch;
   const cat = currentFormularyCategory;
 
-  const filtered = DRUG_DATABASE.filter(d => {
+  const qWords = q ? q.split(/[\s,]+/).filter(w => w.length >= 3) : [];
+  const protocolMedNames = new Set();
+  if (q && typeof CLINICAL_KNOWLEDGE_BASE !== "undefined") {
+    CLINICAL_KNOWLEDGE_BASE.forEach(kb => {
+      const kbHay = [
+        kb.diagnosis || "",
+        ...(Array.isArray(kb.tags) ? kb.tags : []),
+        ...(Array.isArray(kb.symptoms) ? kb.symptoms : [])
+      ].join(" ").toLowerCase();
+      const kbMatch = kbHay.includes(q) || (qWords.length > 0 && qWords.every(w => kbHay.includes(w)));
+      if (kbMatch) {
+        [...(kb.medications || []), ...(kb.pediatricMedications || []), ...(kb.infantMedications || [])].forEach(m => {
+          if (m && m.name) {
+            const cleanM = m.name.toLowerCase().replace(/^(tab\.|cap\.|inj\.|syp\.|drops)\s*/i, "").split("(")[0].trim();
+            if (cleanM.length >= 4) protocolMedNames.add(cleanM);
+          }
+        });
+      }
+    });
+  }
+
+  const scored = [];
+  DRUG_DATABASE.forEach(d => {
     const matchCat = cat === "all" || d.cat === cat;
-    if (!matchCat) return false;
-    if (!q) return true;
-    const matchName = d.name.toLowerCase().includes(q);
-    const matchGen = (d.generic || "").toLowerCase().includes(q);
-    const matchCatName = (d.cat || "").toLowerCase().includes(q);
-    const matchSymptoms = Array.isArray(d.symptoms) && d.symptoms.some(s => s.toLowerCase().includes(q));
-    const matchJan = (d.janAushadhi || "").toLowerCase().includes(q);
-    return matchName || matchGen || matchCatName || matchSymptoms || matchJan;
+    if (!matchCat) return;
+    if (!q) {
+      scored.push({ d, score: 1 });
+      return;
+    }
+    const nameL = (d.name || "").toLowerCase();
+    const genL = (d.generic || "").toLowerCase();
+    const catL = (d.cat || "").toLowerCase();
+    const janL = (d.janAushadhi || "").toLowerCase();
+    const notesL = ((d.notes || "") + " " + (d.instructions || "")).toLowerCase();
+    const symList = Array.isArray(d.symptoms) ? d.symptoms.map(s => String(s).toLowerCase()) : [];
+    const symJoined = symList.join(" ");
+
+    let score = 0;
+    if (nameL.includes(q) || genL.includes(q)) score += 100;
+    if (symList.some(s => s.includes(q))) score += 80;
+    for (const pm of protocolMedNames) {
+      if (nameL.includes(pm) || genL.includes(pm)) {
+        score += 70;
+        break;
+      }
+    }
+    if (notesL.includes(q) || catL.includes(q) || janL.includes(q)) score += 45;
+
+    if (score === 0 && qWords.length > 0) {
+      const fullHay = nameL + " " + genL + " " + symJoined + " " + notesL + " " + catL;
+      const wordHits = qWords.filter(w => fullHay.includes(w)).length;
+      if (wordHits === qWords.length) score += 35;
+      else if (wordHits > 0 && qWords.length > 1) score += wordHits * 10;
+    }
+
+    if (score > 0) scored.push({ d, score });
   });
+
+  if (q) scored.sort((a, b) => b.score - a.score);
+  const filtered = scored.map(x => x.d);
 
   if (countEl) {
     countEl.textContent = `Showing ${filtered.length} of ${DRUG_DATABASE.length} medicines, injectables & supplies`;
@@ -18949,7 +18998,7 @@ const OTA_STORAGE_KEYS = {
 };
 
 const DEFAULT_OTA_MANIFEST_URL = "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ota-manifest.json";
-const OTA_BASELINE_VERSION = "4.3.2-baseline";
+const OTA_BASELINE_VERSION = "4.3.3-baseline";
 let _otaBaselineSnapshot = null;
 
 function captureOtaBaselines() {
