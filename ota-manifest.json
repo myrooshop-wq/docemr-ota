@@ -1,10 +1,10 @@
 {
-  "version": "4.3.2",
-  "updatedAt": "2026-11-25 16:15 IST",
+  "version": "4.3.3",
+  "updatedAt": "2026-11-25 16:25 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "✨ UI & Settings Updated (v4.3.2 OTA)",
+    "title": "✨ UI & Settings Updated (v4.3.3 OTA)",
     "message": "Professional Clinic Header, Settings live header sync, dynamic version badge, and 203 PMBJP prices updated Over-The-Air!"
   },
   "uiBundle": {
