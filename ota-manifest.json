@@ -1,11 +1,11 @@
 {
-  "version": "4.3.7",
-  "updatedAt": "2026-11-25 17:05 IST",
+  "version": "4.3.8",
+  "updatedAt": "2026-11-25 18:15 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "✨ Smart Autocompletes Added (v4.3.7 OTA)",
-    "message": "Clinical Kits (Medicine + Diagnosis) & Doctor Rules (Symptoms) now have instant smart dropdowns!"
+    "title": "✨ Smart Chips & Dropdowns in Kits & Rules (v4.3.8)",
+    "message": "Clinical Kits & Medicine Preference Rules now reuse Consultation smart chips & drug/diagnosis/symptom dropdowns!"
   },
   "clinicalKb": {
     "mode": "merge",
