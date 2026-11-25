@@ -1,11 +1,11 @@
 {
-  "version": "4.3.5",
-  "updatedAt": "2026-11-25 16:45 IST",
+  "version": "4.3.7",
+  "updatedAt": "2026-11-25 17:05 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "⚡ Fast AI + 20+ Diseases Updated (v4.3.5 OTA)",
-    "message": "Gemini AI Scribe is now 3-5x faster, and Dengue, Malaria, Typhoid, UTI, Migraine, Asthma & 15+ more diseases are searchable in Library!"
+    "title": "✨ Smart Autocompletes Added (v4.3.7 OTA)",
+    "message": "Clinical Kits (Medicine + Diagnosis) & Doctor Rules (Symptoms) now have instant smart dropdowns!"
   },
   "clinicalKb": {
     "mode": "merge",
