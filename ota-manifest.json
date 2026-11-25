@@ -1,33 +1,40 @@
 {
   "version": "4.2.1",
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-25 15:05 IST",
   "notice": {
     "show": true,
-    "type": "info",
-    "title": "Clinical Update",
-    "message": "Formulary & Monsoon Dengue Protocol updated over-the-air."
+    "type": "success",
+    "title": "🚀 Live OTA Update Verified",
+    "message": "Congratulations! Your Over-The-Air (OTA) sync is active. Tab. Z-Doctor Special 500mg and Dengue Protocol have been added live!"
   },
   "formulary": {
     "mode": "merge",
     "items": [
       {
-        "name": "Tab. Dolo 650mg",
-        "generic": "Paracetamol 650mg",
+        "name": "Tab. Z-Doctor Special 500mg (OTA Live Test)",
+        "generic": "LiveTestSalt 500mg",
         "category": "Analgesic & Antipyretic",
         "cat": "Analgesic & Antipyretic",
-        "dose": "1-0-1 (SOS)",
+        "form": "Tablet",
+        "route": "Oral",
+        "dose": "1 Tab OD",
         "timing": "After food",
         "duration": "3 days",
-        "janAushadhi": "Tab. Paracetamol 650mg (PMBJP - ₹1.80/strip)",
-        "notes": "Updated via OTA: Max 4g/day; safe in dengue fever."
+        "symptoms": [
+          "ota test",
+          "fever",
+          "verification test"
+        ],
+        "janAushadhi": "PMBJP - ₹1.00 (OTA Special)",
+        "notes": "✅ Pushed directly from GitHub OTA without an APK update!"
       }
     ]
   },
   "diagnoses": [
-    "Dengue Fever (NS1 Positive)"
+    "Dengue Fever with Warning Signs (OTA Verified)"
   ],
   "aiPrompts": {
-    "ALL": "- Prefer Jan Aushadhi affordable generic equivalents in remarks when appropriate."
+    "ALL": "- [OTA Verified]: Recommend oral hydration & Jan Aushadhi generic options."
   },
-  "hotfixCss": ".badge-ota-sample { border-radius: 6px; }"
+  "hotfixCss": "#ota-notice-banner { border-width: 2px !important; box-shadow: 0 4px 12px rgba(13,148,136,0.15) !important; }"
 }
