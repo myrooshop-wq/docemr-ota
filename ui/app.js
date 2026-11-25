@@ -11433,7 +11433,7 @@ function updateClinicHeader() {
   const gDoc = document.getElementById("dashboard-greeting-name");
   if (gDoc) gDoc.textContent = doctorName;
 
-  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.3";
+  const activeVer = (typeof localStorage !== "undefined" && localStorage.getItem("docemr_ota_version")) || "4.3.5";
   const cleanVer = String(activeVer).replace(/^v/i, "").replace(/-baseline$/i, "");
   const hVer = document.getElementById("header-app-version");
   if (hVer) hVer.textContent = "v" + cleanVer;
@@ -17464,9 +17464,12 @@ function rankDiscoveredGeminiModels(modelsArray) {
   const score = (name) => {
     const n = name.toLowerCase();
     let s = 0;
-    if (n.includes("1.5-flash")) s += 100;
-    else if (n.includes("2.0-flash")) s += 95;
-    else if (n.includes("1.5-pro")) s += 85;
+    if (n.includes("2.5-flash-lite")) s += 120;
+    else if (n.includes("2.0-flash-lite")) s += 115;
+    else if (n.includes("2.5-flash")) s += 110;
+    else if (n.includes("2.0-flash")) s += 105;
+    else if (n.includes("1.5-flash")) s += 90;
+    else if (n.includes("1.5-pro")) s += 70;
     else if (n.includes("flash")) s += 75;
     else if (n.includes("2.0")) s += 70;
     else if (n.includes("pro")) s += 40;
@@ -17490,21 +17493,32 @@ async function discoverGeminiModels(apiKey) {
   return rankDiscoveredGeminiModels(data.models || []);
 }
 
-async function callSingleGeminiModel(apiKey, model, prompt, useJsonMime) {
+async function callSingleGeminiModel(apiKey, model, prompt, useJsonMime, disableThinking = true) {
   const url = "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent?key=" + encodeURIComponent(apiKey);
-  const genConfig = { temperature: 0.1 };
+  const genConfig = { temperature: 0.1, maxOutputTokens: 1024 };
   if (useJsonMime) {
     genConfig.responseMimeType = "application/json";
   }
+  if (disableThinking && /2\.5/i.test(model) && !/lite/i.test(model)) {
+    genConfig.thinkingConfig = { thinkingBudget: 0 };
+  }
 
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: genConfig
-    })
-  });
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), 12000) : null;
+  let resp;
+  try {
+    resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      ...(controller ? { signal: controller.signal } : {}),
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: genConfig
+      })
+    });
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 
   if (!resp.ok) {
     const errData = await resp.json().catch(() => ({}));
@@ -17761,18 +17775,18 @@ async function runGeminiClinicalExtraction(apiKey, rawText, formatLabel) {
 
   // Auto-clean any deprecated or invalid cached model
   let cachedModel = localStorage.getItem("docemr_gemini_working_model");
-  if (cachedModel && (/gemini-pro|gemini-1\.0|2\.5/i.test(cachedModel))) {
+  if (cachedModel && (/gemini-pro|gemini-1\.0/i.test(cachedModel))) {
     localStorage.removeItem("docemr_gemini_working_model");
     cachedModel = null;
   }
   const initialCandidates = [];
   if (cachedModel) initialCandidates.push(cachedModel);
   [
-    "gemini-1.5-flash",
-    "gemini-1.5-flash-latest",
+    "gemini-2.5-flash-lite",
+    "gemini-2.0-flash-lite",
+    "gemini-2.5-flash",
     "gemini-2.0-flash",
-    "gemini-2.0-flash-exp",
-    "gemini-1.5-pro",
+    "gemini-1.5-flash",
     "gemini-1.5-flash-8b"
   ].forEach(m => {
     if (!initialCandidates.includes(m)) initialCandidates.push(m);
@@ -17788,9 +17802,12 @@ async function runGeminiClinicalExtraction(apiKey, rawText, formatLabel) {
     try {
       return await callSingleGeminiModel(apiKey, model, prompt, true);
     } catch (e) {
-      // If 400 was due to responseMimeType unsupported on a model, retry without responseMimeType
+      // If 400 was due to thinkingConfig or responseMimeType unsupported, retry without them
+      if (e.httpStatus === 400 && /thinking|thinkingBudget/i.test(e.message || "")) {
+        return await callSingleGeminiModel(apiKey, model, prompt, useJsonMime || true, false);
+      }
       if (e.httpStatus === 400 && /response_mime_type|responseMimeType|JSON mode/i.test(e.message || "")) {
-        return await callSingleGeminiModel(apiKey, model, prompt, false);
+        return await callSingleGeminiModel(apiKey, model, prompt, false, false);
       }
       throw e;
     }
@@ -18998,7 +19015,7 @@ const OTA_STORAGE_KEYS = {
 };
 
 const DEFAULT_OTA_MANIFEST_URL = "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ota-manifest.json";
-const OTA_BASELINE_VERSION = "4.3.3-baseline";
+const OTA_BASELINE_VERSION = "4.3.5-baseline";
 let _otaBaselineSnapshot = null;
 
 function captureOtaBaselines() {
