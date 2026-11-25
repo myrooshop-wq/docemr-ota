@@ -1,11 +1,11 @@
 {
-  "version": "4.2.1",
-  "updatedAt": "2026-11-25 15:05 IST",
+  "version": "4.2.2",
+  "updatedAt": "2026-11-25 15:15 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "🚀 Live OTA Update Verified",
-    "message": "Congratulations! Your Over-The-Air (OTA) sync is active. Tab. Z-Doctor Special 500mg and Dengue Protocol have been added live!"
+    "title": "🚀 Live OTA Update v4.2.2 Verified",
+    "message": "OTA Sync is working! Tab. Z-Doctor Special 500mg and Dengue Fever (OTA Verified) are now live."
   },
   "formulary": {
     "mode": "merge",
