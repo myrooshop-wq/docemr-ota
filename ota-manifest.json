@@ -1,16 +1,807 @@
 {
-  "version": "4.3.3",
-  "updatedAt": "2026-11-25 16:25 IST",
+  "version": "4.3.4",
+  "updatedAt": "2026-11-25 16:40 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "✨ UI & Settings Updated (v4.3.3 OTA)",
-    "message": "Professional Clinic Header, Settings live header sync, dynamic version badge, and 203 PMBJP prices updated Over-The-Air!"
+    "title": "🩺 20+ Disease Protocols Added (v4.3.4 OTA)",
+    "message": "Dengue, Malaria, Typhoid, UTI, Kidney Stone, Migraine, Gout, Jaundice, Asthma, Diabetes, Hypertension & more are now searchable in Drug Library!"
   },
-  "uiBundle": {
-    "htmlUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/index.html",
-    "cssUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/styles.css",
-    "jsUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/app.js"
+  "clinicalKb": {
+    "mode": "merge",
+    "items": [
+      {
+        "id": "kb-dengue",
+        "diagnosis": "Dengue Fever (Suspected / NS1 Positive)",
+        "tags": [
+          "dengue",
+          "ns1",
+          "platelets",
+          "thrombocytopenia",
+          "breakbone fever",
+          "retro-orbital pain",
+          "monsoon fever"
+        ],
+        "symptoms": [
+          "High Fever",
+          "Severe Body Ache",
+          "Retro-orbital Pain",
+          "Nausea",
+          "Vomiting",
+          "Rash"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Dolo 650mg",
+            "dose": "1-0-1 (SOS)",
+            "timing": "After food",
+            "duration": "5 days",
+            "notes": "ONLY Paracetamol; strictly avoid NSAIDs/Ibuprofen/Aspirin"
+          },
+          {
+            "name": "IV Normal Saline (NS 0.9%) 500ml",
+            "dose": "IV Infusion as per hematocrit/BP",
+            "timing": "Hospital/OPD hydration",
+            "duration": "SOS"
+          },
+          {
+            "name": "IV Ringer Lactate (RL) 500ml",
+            "dose": "IV Infusion",
+            "timing": "Hydration",
+            "duration": "SOS"
+          },
+          {
+            "name": "Powder ORS WHO Formula (Electral / Enerzal Sachet 21.8g)",
+            "dose": "1 sachet in 1L water",
+            "timing": "Sip frequently",
+            "duration": "5 days"
+          },
+          {
+            "name": "Tab. Emeset 4mg (Vomikind)",
+            "dose": "1 Tab SOS",
+            "timing": "Before food",
+            "duration": "3 days"
+          },
+          {
+            "name": "Tab. Pantop 40 (Pantocid)",
+            "dose": "1-0-0",
+            "timing": "Empty stomach",
+            "duration": "5 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-chikungunya",
+        "diagnosis": "Chikungunya Fever",
+        "tags": [
+          "chikungunya",
+          "joint pain fever",
+          "polyarthralgia",
+          "mosquito fever"
+        ],
+        "symptoms": [
+          "High Fever",
+          "Severe Joint Pain",
+          "Swollen Joints",
+          "Rash",
+          "Fatigue"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Dolo 650mg",
+            "dose": "1-0-1 (SOS)",
+            "timing": "After food",
+            "duration": "5 days"
+          },
+          {
+            "name": "Tab. Pantop 40 (Pantocid)",
+            "dose": "1-0-0",
+            "timing": "Empty stomach",
+            "duration": "5 days"
+          },
+          {
+            "name": "Tab. Hydroxychloroquine 200mg (HCQS 200)",
+            "dose": "1 Tab OD",
+            "timing": "After food",
+            "duration": "30 days (for persistent arthralgia)"
+          }
+        ]
+      },
+      {
+        "id": "kb-malaria",
+        "diagnosis": "Malaria (Vivax / Falciparum)",
+        "tags": [
+          "malaria",
+          "vivax",
+          "falciparum",
+          "chills rigors",
+          "intermittent fever"
+        ],
+        "symptoms": [
+          "High Fever with Chills",
+          "Rigors",
+          "Sweating",
+          "Headache"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Artemether 80mg + Lumefantrine 480mg (Coartem / Falcigo-Plus)",
+            "dose": "1 Tab BD",
+            "timing": "With fatty food",
+            "duration": "3 days"
+          },
+          {
+            "name": "Tab. Chloroquine Phosphate 250mg (Lariago 250)",
+            "dose": "As per 3-day regimen",
+            "timing": "After meals",
+            "duration": "3 days"
+          },
+          {
+            "name": "Tab. Primaquine 15mg (Malirid / Primarid)",
+            "dose": "1 Tab OD",
+            "timing": "After food",
+            "duration": "14 days"
+          },
+          {
+            "name": "Tab. Dolo 650mg",
+            "dose": "1-0-1 (SOS)",
+            "timing": "After food",
+            "duration": "3 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-typhoid",
+        "diagnosis": "Typhoid / Enteric Fever",
+        "tags": [
+          "typhoid",
+          "enteric fever",
+          "widal",
+          "typhidot",
+          "step ladder fever"
+        ],
+        "symptoms": [
+          "Persistent Fever",
+          "Abdominal Pain",
+          "Coated Tongue",
+          "Weakness",
+          "Headache"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Cefixime 200mg (Taxim-O)",
+            "dose": "1-0-1",
+            "timing": "After food",
+            "duration": "7-10 days"
+          },
+          {
+            "name": "Tab. Azithromycin 500mg (Azithral)",
+            "dose": "1-0-0",
+            "timing": "After food",
+            "duration": "7 days"
+          },
+          {
+            "name": "Inj. Ceftriaxone 1g (Monocef 1g)",
+            "dose": "1g IV BD",
+            "timing": "Every 12 hours",
+            "duration": "5-7 days"
+          },
+          {
+            "name": "Tab. Dolo 650mg",
+            "dose": "1-0-1 (SOS)",
+            "timing": "After food",
+            "duration": "5 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-uti",
+        "diagnosis": "Urinary Tract Infection (UTI)",
+        "tags": [
+          "uti",
+          "urinary tract infection",
+          "burning micturition",
+          "dysuria",
+          "cystitis",
+          "urine infection"
+        ],
+        "symptoms": [
+          "Burning Urination",
+          "Frequent Urination",
+          "Lower Abdominal Pain",
+          "Fever"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Nitrofurantoin 100mg (Niftas / Martifur)",
+            "dose": "1 Tab BD",
+            "timing": "With food",
+            "duration": "5-7 days"
+          },
+          {
+            "name": "Tab. Ciprofloxacin 500mg (Ciplox 500)",
+            "dose": "1 Tab BD",
+            "timing": "After food",
+            "duration": "5 days"
+          },
+          {
+            "name": "Syp. Disodium Hydrogen Citrate (Alkasol / Citralka)",
+            "dose": "10ml in glass of water TDS",
+            "timing": "After food",
+            "duration": "5 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-renal-colic",
+        "diagnosis": "Renal Colic / Kidney Stone",
+        "tags": [
+          "renal colic",
+          "kidney stone",
+          "urolithiasis",
+          "nephrolithiasis",
+          "flank pain",
+          "ureteric calculus"
+        ],
+        "symptoms": [
+          "Severe Flank Pain",
+          "Pain Radiating to Groin",
+          "Hematuria",
+          "Nausea",
+          "Vomiting"
+        ],
+        "medications": [
+          {
+            "name": "Inj. Dynapar AQ / Voveran 75mg/1ml",
+            "dose": "75mg IM Stat",
+            "timing": "Deep IM",
+            "duration": "Stat"
+          },
+          {
+            "name": "Inj. Drotin 40mg/2ml (Drotaverine)",
+            "dose": "40mg IV/IM Stat",
+            "timing": "Slow IV/IM",
+            "duration": "Stat"
+          },
+          {
+            "name": "Tab. Tamsulosin 0.4mg (Urimax / Veltam)",
+            "dose": "1 Cap OD",
+            "timing": "30 mins after dinner",
+            "duration": "15 days"
+          },
+          {
+            "name": "Syp. Disodium Hydrogen Citrate (Alkasol / Citralka)",
+            "dose": "10ml in water TDS",
+            "timing": "After meals",
+            "duration": "15 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-migraine",
+        "diagnosis": "Acute Migraine / Vascular Headache",
+        "tags": [
+          "migraine",
+          "hemicrania",
+          "throbbing headache",
+          "photophobia",
+          "aura"
+        ],
+        "symptoms": [
+          "Unilateral Headache",
+          "Throbbing Pain",
+          "Nausea",
+          "Photophobia",
+          "Vomiting"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Sumatriptan 50mg (Suminat 50)",
+            "dose": "1 Tab Stat at onset",
+            "timing": "With water",
+            "duration": "SOS"
+          },
+          {
+            "name": "Tab. Naproxen 500mg (Naprosyn 500)",
+            "dose": "1 Tab BD SOS",
+            "timing": "After food",
+            "duration": "3 days"
+          },
+          {
+            "name": "Tab. Propranolol 40mg + Flunarizine 10mg (Betacap-TR / Inderal-F)",
+            "dose": "1 Tab OD",
+            "timing": "Bedtime",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Emeset 4mg (Vomikind)",
+            "dose": "1 Tab SOS",
+            "timing": "Before food",
+            "duration": "3 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-gout",
+        "diagnosis": "Gout / Hyperuricemia",
+        "tags": [
+          "gout",
+          "uric acid",
+          "hyperuricemia",
+          "podagra",
+          "big toe swelling",
+          "gouty arthritis"
+        ],
+        "symptoms": [
+          "Severe Big Toe Pain",
+          "Joint Redness",
+          "Joint Swelling"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Colchicine 0.5mg (Goutnil)",
+            "dose": "0.5mg BD/TDS",
+            "timing": "After meals",
+            "duration": "3-5 days"
+          },
+          {
+            "name": "Tab. Febuxostat 40mg (Febutaz / Febucip)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Etoricoxib 90mg (Nucoxia 90)",
+            "dose": "1 Tab OD",
+            "timing": "After food",
+            "duration": "5 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-jaundice",
+        "diagnosis": "Viral Hepatitis / Jaundice / Fatty Liver",
+        "tags": [
+          "jaundice",
+          "hepatitis",
+          "fatty liver",
+          "liver disease",
+          "elevated bilirubin",
+          "gallstones"
+        ],
+        "symptoms": [
+          "Yellow Eyes",
+          "Dark Urine",
+          "Loss of Appetite",
+          "Nausea",
+          "Right Upper Quadrant Pain"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Ursodeoxycholic Acid 300mg (Udiliv 300)",
+            "dose": "1 Tab BD",
+            "timing": "With meals",
+            "duration": "30 days"
+          },
+          {
+            "name": "Cap. Silymarin 140mg + L-Ornithine L-Aspartate (Hepamerz)",
+            "dose": "1 Cap BD",
+            "timing": "After meals",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Pantop 40 (Pantocid)",
+            "dose": "1-0-0",
+            "timing": "Empty stomach",
+            "duration": "14 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-asthma-copd",
+        "diagnosis": "Bronchial Asthma / COPD",
+        "tags": [
+          "asthma",
+          "copd",
+          "wheezing",
+          "breathlessness",
+          "dyspnea",
+          "bronchospasm",
+          "inhaler"
+        ],
+        "symptoms": [
+          "Shortness of Breath",
+          "Wheezing",
+          "Chest Tightness",
+          "Cough"
+        ],
+        "medications": [
+          {
+            "name": "Respules Budesonide 0.5mg (Budecort Respules)",
+            "dose": "1 Respule Nebulizer BD",
+            "timing": "Morning & evening",
+            "duration": "5 days"
+          },
+          {
+            "name": "Respules Duolin (Levosalbutamol + Ipratropium)",
+            "dose": "1 Respule Nebulizer TDS",
+            "timing": "Every 8 hours",
+            "duration": "5 days"
+          },
+          {
+            "name": "Tab. Doxofylline 400mg (Doxolin / Doxoril)",
+            "dose": "1 Tab BD",
+            "timing": "After meals",
+            "duration": "10 days"
+          },
+          {
+            "name": "Tab. Acebrophylline 100mg (AB Phylline)",
+            "dose": "1 Cap BD",
+            "timing": "After food",
+            "duration": "10 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-hypertension",
+        "diagnosis": "Essential Hypertension (High BP)",
+        "tags": [
+          "hypertension",
+          "high bp",
+          "blood pressure",
+          "htn"
+        ],
+        "symptoms": [
+          "High Blood Pressure",
+          "Headache",
+          "Dizziness"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Telmisartan 40mg (Telma 40 / Telmikind)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Amlodipine 5mg (Amlong 5)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Cilnidipine 10mg (Cilacar)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Metoprolol Succinate ER 25mg (Betaloc / Metolar XR)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-diabetes",
+        "diagnosis": "Type 2 Diabetes Mellitus",
+        "tags": [
+          "diabetes",
+          "dm",
+          "high sugar",
+          "hyperglycemia",
+          "t2dm",
+          "hba1c"
+        ],
+        "symptoms": [
+          "High Blood Sugar",
+          "Polyuria",
+          "Polydipsia",
+          "Fatigue"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Metformin 500mg SR (Glycomet SR)",
+            "dose": "1 Tab BD",
+            "timing": "With meals",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Teneligliptin 20mg + Metformin 500mg (Zita-M)",
+            "dose": "1 Tab BD",
+            "timing": "With meals",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Dapagliflozin 10mg + Metformin 500mg (Oxra-M / Forxiga-M)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Inj. Insulin Glargine 100 IU/ml (Lantus)",
+            "dose": "10 Units SC OD",
+            "timing": "Bedtime",
+            "duration": "Ongoing"
+          }
+        ]
+      },
+      {
+        "id": "kb-anemia",
+        "diagnosis": "Iron Deficiency Anemia",
+        "tags": [
+          "anemia",
+          "low hemoglobin",
+          "hb low",
+          "iron deficiency",
+          "pallor"
+        ],
+        "symptoms": [
+          "Fatigue",
+          "Weakness",
+          "Pallor",
+          "Breathlessness on Exertion"
+        ],
+        "medications": [
+          {
+            "name": "Cap. Carbonyl Iron 100mg + Folic Acid 1.5mg + Zinc (Fefol-Z)",
+            "dose": "1 Cap OD",
+            "timing": "After meals",
+            "duration": "60 days"
+          },
+          {
+            "name": "Tab. Folic Acid 5mg (Folvite 5mg)",
+            "dose": "1 Tab OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Albendazole 400mg (Zentel 400)",
+            "dose": "1 Tab Stat at night",
+            "timing": "Single dose",
+            "duration": "Stat"
+          }
+        ]
+      },
+      {
+        "id": "kb-hypothyroid",
+        "diagnosis": "Hypothyroidism",
+        "tags": [
+          "hypothyroidism",
+          "thyroid",
+          "high tsh",
+          "weight gain"
+        ],
+        "symptoms": [
+          "Fatigue",
+          "Weight Gain",
+          "Cold Intolerance",
+          "Hair Fall"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Levothyroxine 50mcg (Thyronorm 50)",
+            "dose": "1 Tab OD",
+            "timing": "Empty stomach early morning",
+            "duration": "Ongoing"
+          }
+        ]
+      },
+      {
+        "id": "kb-scabies",
+        "diagnosis": "Scabies / Ectoparasitic Infestation",
+        "tags": [
+          "scabies",
+          "night itching",
+          "mites",
+          "itchy rash"
+        ],
+        "symptoms": [
+          "Severe Night Itching",
+          "Finger Web Rash",
+          "Itchy Papules"
+        ],
+        "medications": [
+          {
+            "name": "Lotion Gamma Benzene Hexachloride 1% + Cetrimide (Scaboma Lotion)",
+            "dose": "Apply neck down overnight",
+            "timing": "Single application",
+            "duration": "Stat"
+          },
+          {
+            "name": "Tab. Bilastine 20mg (Bilasur / Bilashine)",
+            "dose": "1 Tab OD",
+            "timing": "Before food",
+            "duration": "10 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-fungal",
+        "diagnosis": "Tinea / Ringworm / Fungal Infection",
+        "tags": [
+          "ringworm",
+          "tinea",
+          "fungal",
+          "fungal infection",
+          "athletes foot",
+          "dad",
+          "khujli"
+        ],
+        "symptoms": [
+          "Circular Itchy Patch",
+          "Skin Rash",
+          "Scaling"
+        ],
+        "medications": [
+          {
+            "name": "Cream Ketoconazole 2% + Zinc Pyrithione 1% (Ketocip)",
+            "dose": "Apply BD",
+            "timing": "Morning & night",
+            "duration": "14 days"
+          },
+          {
+            "name": "Cream Ciclopirox Olamine 1% (Batrafen / Ciclopirox)",
+            "dose": "Apply BD",
+            "timing": "Morning & night",
+            "duration": "14 days"
+          },
+          {
+            "name": "Tab. Bilastine 20mg (Bilasur / Bilashine)",
+            "dose": "1 Tab OD",
+            "timing": "Before food",
+            "duration": "10 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-herpes-zoster",
+        "diagnosis": "Herpes Zoster / Shingles",
+        "tags": [
+          "herpes zoster",
+          "shingles",
+          "viral blisters",
+          "painful rash"
+        ],
+        "symptoms": [
+          "Unilateral Painful Blisters",
+          "Burning Skin Pain",
+          "Neuralgia"
+        ],
+        "medications": [
+          {
+            "name": "Tab. Valacyclovir 500mg (Valcivir 500)",
+            "dose": "1 Tab TDS",
+            "timing": "After food",
+            "duration": "7 days"
+          },
+          {
+            "name": "Tab. Amitriptyline 10mg (Tryptomer 10)",
+            "dose": "1 Tab OD",
+            "timing": "Bedtime",
+            "duration": "14 days"
+          },
+          {
+            "name": "Lotion Calamine + Liquid Paraffin (Caladryl)",
+            "dose": "Apply TDS",
+            "timing": "Topical",
+            "duration": "7 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-piles",
+        "diagnosis": "Hemorrhoids / Piles / Anal Fissure",
+        "tags": [
+          "piles",
+          "hemorrhoids",
+          "fissure",
+          "bleeding per rectum",
+          "constipation"
+        ],
+        "symptoms": [
+          "Painful Defecation",
+          "Rectal Bleeding",
+          "Hard Stools"
+        ],
+        "medications": [
+          {
+            "name": "Powder Ispaghula Husk (Isabgol / Fybogel 100g)",
+            "dose": "1-2 spoons in warm water",
+            "timing": "Bedtime",
+            "duration": "14 days"
+          },
+          {
+            "name": "Syp. Polyethylene Glycol 3350 (Pegmove / Peglec)",
+            "dose": "17g in water OD",
+            "timing": "Bedtime",
+            "duration": "14 days"
+          },
+          {
+            "name": "Tab. Dolo 650mg",
+            "dose": "1-0-1 (SOS)",
+            "timing": "After food",
+            "duration": "5 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-conjunctivitis",
+        "diagnosis": "Acute Conjunctivitis / Allergic Eye",
+        "tags": [
+          "conjunctivitis",
+          "red eye",
+          "eye allergy",
+          "pink eye",
+          "itchy eyes"
+        ],
+        "symptoms": [
+          "Red Eyes",
+          "Watery Eyes",
+          "Eye Discharge",
+          "Itchy Eyes"
+        ],
+        "medications": [
+          {
+            "name": "Eye Drops Olopatadine 0.1% (Opat)",
+            "dose": "1 drop BD",
+            "timing": "Morning & evening",
+            "duration": "14 days"
+          },
+          {
+            "name": "Eye Drops Tobramycin 0.3% + Dexamethasone 0.1% (Tobradex)",
+            "dose": "1 drop QID",
+            "timing": "Every 6 hours",
+            "duration": "7 days"
+          },
+          {
+            "name": "Eye Drops Carboxymethylcellulose 0.5% (Refresh Tears)",
+            "dose": "1-2 drops QID",
+            "timing": "Throughout day",
+            "duration": "30 days"
+          }
+        ]
+      },
+      {
+        "id": "kb-allergic-rhinitis",
+        "diagnosis": "Allergic Rhinitis / Sinusitis",
+        "tags": [
+          "allergic rhinitis",
+          "sinusitis",
+          "hay fever",
+          "sneezing",
+          "nasal polyps",
+          "blocked nose"
+        ],
+        "symptoms": [
+          "Sneezing",
+          "Runny Nose",
+          "Nasal Congestion",
+          "Sinus Headache"
+        ],
+        "medications": [
+          {
+            "name": "Nasal Spray Fluticasone Furoate 27.5mcg (Flixonase / Furamist)",
+            "dose": "2 sprays each nostril OD",
+            "timing": "Morning",
+            "duration": "30 days"
+          },
+          {
+            "name": "Tab. Bilastine 20mg (Bilasur / Bilashine)",
+            "dose": "1 Tab OD",
+            "timing": "Before food",
+            "duration": "10 days"
+          },
+          {
+            "name": "Nasal Drops Oxymetazoline 0.05% (Otrivin)",
+            "dose": "2 drops BD",
+            "timing": "Morning & night",
+            "duration": "Max 5 days"
+          }
+        ]
+      }
+    ]
   },
   "formulary": {
     "mode": "merge",
@@ -18,7 +809,19 @@
       {
         "name": "Tab. Dolo 650mg",
         "dose": "1-0-1 (SOS)",
-        "janAushadhi": "PMBJP #511: ₹15 / 15's (Market ~₹170)"
+        "janAushadhi": "PMBJP #511: ₹15 / 15's (Market ~₹170)",
+        "symptoms": [
+          "fever",
+          "high fever",
+          "dengue",
+          "chikungunya",
+          "typhoid",
+          "malaria",
+          "headache",
+          "body ache",
+          "pain",
+          "viral fever"
+        ]
       },
       {
         "name": "Tab. Crocin 500mg",
@@ -1029,6 +1832,18 @@
         "name": "Tab. N-Acetylcysteine 600mg Effervescent (Mucinac 600)",
         "dose": "1 Tab dissolved in half glass water BD",
         "janAushadhi": "PMBJP #2225: ₹135 / 10's (Market ~₹261)"
+      },
+      {
+        "name": "Powder ORS WHO Formula (Electral / Enerzal Sachet 21.8g)",
+        "dose": "Dissolve 1 full sachet in 1 Litre clean drinking water",
+        "symptoms": [
+          "dehydration",
+          "dengue",
+          "loose motions",
+          "diarrhea",
+          "vomiting weakness",
+          "heat stroke"
+        ]
       }
     ]
   },
