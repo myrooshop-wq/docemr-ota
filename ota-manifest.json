@@ -1,11 +1,11 @@
 {
-  "version": "4.3.4",
-  "updatedAt": "2026-11-25 16:40 IST",
+  "version": "4.3.5",
+  "updatedAt": "2026-11-25 16:45 IST",
   "notice": {
     "show": true,
     "type": "success",
-    "title": "🩺 20+ Disease Protocols Added (v4.3.4 OTA)",
-    "message": "Dengue, Malaria, Typhoid, UTI, Kidney Stone, Migraine, Gout, Jaundice, Asthma, Diabetes, Hypertension & more are now searchable in Drug Library!"
+    "title": "⚡ Fast AI + 20+ Diseases Updated (v4.3.5 OTA)",
+    "message": "Gemini AI Scribe is now 3-5x faster, and Dengue, Malaria, Typhoid, UTI, Migraine, Asthma & 15+ more diseases are searchable in Library!"
   },
   "clinicalKb": {
     "mode": "merge",
@@ -1849,5 +1849,10 @@
   },
   "aiPrompts": {
     "ALL": "- Mention PMBJP Jan Aushadhi affordable generic options when appropriate."
+  },
+  "uiBundle": {
+    "htmlUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/index.html",
+    "cssUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/styles.css",
+    "jsUrl": "https://raw.githubusercontent.com/myrooshop-wq/docemr-ota/main/ui/app.js"
   }
 }
