@@ -1,0 +1,33 @@
+{
+  "version": "4.2.1",
+  "updatedAt": "2026-11-25",
+  "notice": {
+    "show": true,
+    "type": "info",
+    "title": "Clinical Update",
+    "message": "Formulary & Monsoon Dengue Protocol updated over-the-air."
+  },
+  "formulary": {
+    "mode": "merge",
+    "items": [
+      {
+        "name": "Tab. Dolo 650mg",
+        "generic": "Paracetamol 650mg",
+        "category": "Analgesic & Antipyretic",
+        "cat": "Analgesic & Antipyretic",
+        "dose": "1-0-1 (SOS)",
+        "timing": "After food",
+        "duration": "3 days",
+        "janAushadhi": "Tab. Paracetamol 650mg (PMBJP - ₹1.80/strip)",
+        "notes": "Updated via OTA: Max 4g/day; safe in dengue fever."
+      }
+    ]
+  },
+  "diagnoses": [
+    "Dengue Fever (NS1 Positive)"
+  ],
+  "aiPrompts": {
+    "ALL": "- Prefer Jan Aushadhi affordable generic equivalents in remarks when appropriate."
+  },
+  "hotfixCss": ".badge-ota-sample { border-radius: 6px; }"
+}
